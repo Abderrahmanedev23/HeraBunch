@@ -79,23 +79,23 @@ export function Traditions() {
       gsap.set('.trad-plate', { z: 2 })
       const tl = gsap.timeline({
         defaults: { ease: 'power3.out' },
-        scrollTrigger: { trigger: root.current, start: 'top top', end: '+=200%', scrub: 0.8, pin: true },
+        scrollTrigger: { trigger: root.current, start: 'top top', end: '+=100%', scrub: 0.5, pin: true },
       })
       // The camera starts low, at the table's side, and rises until it looks straight down,
       // circling a little as it goes (the tabletop turns in its own plane and stays level).
       tl.fromTo(
         '.trad-ring',
         { rotationX: 62, scale: 0.86, yPercent: -10 },
-        { rotationX: 0, scale: 1, yPercent: 0, duration: 1.6, ease: 'power2.inOut' },
-        0.35,
+        { rotationX: 0, scale: 1, yPercent: 0, duration: 1, ease: 'power2.inOut' },
+        0.1,
       )
-        .fromTo('.trad-spin', { rotation: -24 }, { rotation: 0, duration: 1.6, ease: 'power2.inOut' }, 0.35)
+        .fromTo('.trad-spin', { rotation: -24 }, { rotation: 0, duration: 1, ease: 'power2.inOut' }, 0.1)
         // Plates are served from both sides while the camera moves.
-        .from('.trad-plate.from-a', { xPercent: -420, yPercent: 40, rotate: -40, stagger: 0.12, duration: 1.2 }, 0)
-        .from('.trad-plate.from-b', { xPercent: 420, yPercent: 40, rotate: 40, stagger: 0.12, duration: 1.2 }, 0)
-        .from('.trad-title .line-2', { yPercent: 110, duration: 0.8 }, 1.4)
-        .from('.trad-key', { opacity: 0, y: 16, stagger: 0.15, duration: 0.5 }, 1.5)
-        .from('.trad-body', { opacity: 0, y: 20, duration: 0.6 }, 1.7)
+        .from('.trad-plate.from-a', { xPercent: -420, yPercent: 40, rotate: -40, stagger: 0.07, duration: 0.7 }, 0)
+        .from('.trad-plate.from-b', { xPercent: 420, yPercent: 40, rotate: 40, stagger: 0.07, duration: 0.7 }, 0)
+        .from('.trad-title .line-2', { yPercent: 110, duration: 0.5 }, 0.8)
+        .from('.trad-key', { opacity: 0, y: 16, stagger: 0.08, duration: 0.35 }, 0.9)
+        .from('.trad-body', { opacity: 0, y: 20, duration: 0.4 }, 1)
     },
     [t],
   )
