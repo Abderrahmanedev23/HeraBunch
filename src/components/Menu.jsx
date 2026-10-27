@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useLang } from '../i18n'
 import { categories, menu } from '../data/menu'
-import { gsap, reducedMotion, ScrollTrigger, scrollTo, useGsap } from '../lib/motion'
+import { gsap, quietly, reducedMotion, ScrollTrigger, scrollTo, useGsap } from '../lib/motion'
 import { shapeStyle } from '../lib/shapes'
 import { Dish } from './Dish'
 import { Label } from './Bits'
@@ -154,6 +154,12 @@ export function Menu() {
     incoming.current = 0
     const g = grid.current
     const side = rtl() ? -1 : 1
+    // If the start of the list has scrolled away, jump back to it now, while the old
+    // dishes are already faded out, so it lands just under the sticky tabs.
+    if (g.getBoundingClientRect().top < 0) {
+      const bar = root.current.querySelector('.tabs-bar').getBoundingClientRect()
+      scrollTo('#menu-panel', -(bar.bottom + 16), { immediate: true })
+    }
     const cards = [...g.querySelectorAll('.dish:not(.is-out)')]
     cards.forEach(settle)
     gsap.fromTo(cards, { x: 60 * step * side, opacity: 0 }, { x: 0, opacity: 1, duration: 0.7, ease: 'power3.out', stagger: 0.06, overwrite: true })
@@ -173,11 +179,9 @@ export function Menu() {
       onComplete: () => {
         g.style.height = ''
         g.classList.remove('is-swapping')
-        ScrollTrigger.refresh()
+        quietly(() => ScrollTrigger.refresh())
       },
     })
-    // If the start of the list has scrolled away, bring it back under the tabs.
-    if (g.getBoundingClientRect().top < 0) scrollTo('#menu-panel', -150)
   }, [filter])
 
   // On touch screens, swiping the dishes sideways moves to the next or previous category.

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { languages, useLang } from '../i18n'
-import { scrollTo } from '../lib/motion'
+import { scrollState, scrollTo } from '../lib/motion'
 import { site } from '../data/site'
 import { Roll, Wordmark } from './Bits'
 
@@ -15,7 +15,9 @@ export function Header() {
     const onScroll = () => {
       const y = window.scrollY
       setSolid(y > 40)
-      setHidden(y > 300 && y > last)
+      // Only real movement counts, and never the site's own scrolls,
+      // so the header doesn't pop in or out on its own.
+      if (!scrollState.auto && Math.abs(y - last) > 3) setHidden(y > 300 && y > last)
       last = y
     }
     window.addEventListener('scroll', onScroll, { passive: true })

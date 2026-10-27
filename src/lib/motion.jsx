@@ -23,13 +23,30 @@ export function startSmoothScroll() {
   gsap.ticker.lagSmoothing(0)
 }
 
-export function scrollTo(target, offset = -20) {
+// Scrolls the site makes by itself (menu links, category switches) shouldn't make
+// the header slide in or out; the header checks this flag.
+export const scrollState = { auto: false }
+
+// Runs something that may nudge the scroll position (like re-measuring scroll animations)
+// without the header treating it as the visitor scrolling.
+export function quietly(fn) {
+  scrollState.auto = true
+  fn()
+  requestAnimationFrame(() => requestAnimationFrame(() => (scrollState.auto = false)))
+}
+
+export function scrollTo(target, offset = -20, { immediate = false } = {}) {
+  scrollState.auto = true
+  const done = () => requestAnimationFrame(() => requestAnimationFrame(() => (scrollState.auto = false)))
   if (lenis) {
-    lenis.scrollTo(target, { offset, duration: 1.4 })
+    lenis.scrollTo(target, { offset, duration: 1.4, immediate, force: true, onComplete: done })
+    if (immediate) done()
     return
   }
   const el = document.querySelector(target)
-  if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY + offset, behavior: reducedMotion ? 'auto' : 'smooth' })
+  const jump = immediate || reducedMotion
+  if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY + offset, behavior: jump ? 'auto' : 'smooth' })
+  setTimeout(done, jump ? 0 : 1000)
 }
 
 // Runs GSAP setup scoped to a ref and reverts it on unmount or when deps change.
