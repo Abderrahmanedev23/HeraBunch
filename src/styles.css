@@ -692,6 +692,13 @@ button:hover .roll-line span {
   transform-style: preserve-3d;
 }
 
+/* The tabletop, its edge and the plates turn together in the table's own plane. */
+.trad-spin {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
 .trad-top {
   position: absolute;
   inset: 0;
@@ -714,7 +721,8 @@ button:hover .roll-line span {
   transform: translateZ(-4.5px);
 }
 
-/* The iron base hangs straight down from the centre of the table. */
+/* The iron base hangs straight down from the centre of the table: two frames
+   crossed at right angles around the column, so it has four legs. */
 .trad-base {
   position: absolute;
   left: 50%;
@@ -723,7 +731,11 @@ button:hover .roll-line span {
   height: 62%;
   translate: -50% 0;
   transform-origin: 50% 0;
-  transform: translateZ(-10px) rotateX(-90deg);
+  transform: translateZ(-10px) rotateZ(45deg) rotateX(-90deg);
+}
+
+.trad-base-b {
+  transform: translateZ(-10px) rotateZ(-45deg) rotateX(-90deg);
 }
 
 /* Its shadow on the floor, level with the bottom of the base. */

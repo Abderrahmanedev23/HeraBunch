@@ -49,11 +49,12 @@ function Tabletop() {
   )
 }
 
-// Wrought-iron base. It hangs below the tabletop in 3D, so it shows while the
-// camera is low and disappears under the table once it looks straight down.
-function Base() {
+// Wrought-iron base. Two of these cross under the table to make four legs. They hang
+// below the tabletop in 3D, so they show while the camera is low and disappear under
+// the table once it looks straight down.
+function Base({ className }) {
   return (
-    <svg className="trad-base" viewBox="0 0 100 140" aria-hidden="true">
+    <svg className={`trad-base ${className}`} viewBox="0 0 100 140" aria-hidden="true">
       <g fill="none" stroke="#3A2A22" strokeWidth="4" strokeLinecap="round">
         <path d="M50 0V112" />
         <path d="M28 4C34 18 44 22 50 22S66 18 72 4" />
@@ -78,13 +79,15 @@ export function Traditions() {
         defaults: { ease: 'power3.out' },
         scrollTrigger: { trigger: root.current, start: 'top top', end: '+=200%', scrub: 0.8, pin: true },
       })
-      // The camera starts low, at the table's side, and rises until it looks straight down.
+      // The camera starts low, at the table's side, and rises until it looks straight down,
+      // circling a little as it goes (the tabletop turns in its own plane and stays level).
       tl.fromTo(
         '.trad-ring',
-        { rotationX: 62, rotation: -18, scale: 0.86, yPercent: -10 },
-        { rotationX: 0, rotation: 0, scale: 1, yPercent: 0, duration: 1.6, ease: 'power2.inOut' },
+        { rotationX: 62, scale: 0.86, yPercent: -10 },
+        { rotationX: 0, scale: 1, yPercent: 0, duration: 1.6, ease: 'power2.inOut' },
         0.35,
       )
+        .fromTo('.trad-spin', { rotation: -24 }, { rotation: 0, duration: 1.6, ease: 'power2.inOut' }, 0.35)
         // Plates are served from both sides while the camera moves.
         .from('.trad-plate.from-a', { xPercent: -420, yPercent: 40, rotate: -40, stagger: 0.12, duration: 1.2 }, 0)
         .from('.trad-plate.from-b', { xPercent: 420, yPercent: 40, rotate: 40, stagger: 0.12, duration: 1.2 }, 0)
@@ -128,12 +131,15 @@ export function Traditions() {
         <div className="trad-scene">
           <div className="trad-ring">
             <div className="trad-floor" aria-hidden="true" />
-            <Base />
-            <div className="trad-edge" aria-hidden="true" />
-            <div className="trad-edge trad-edge-2" aria-hidden="true" />
-            <Tabletop />
-            {moroccan.map((p, i) => plate(p, 'a', i))}
-            {brunch.map((p, i) => plate(p, 'b', i))}
+            <Base className="trad-base-a" />
+            <Base className="trad-base-b" />
+            <div className="trad-spin">
+              <div className="trad-edge" aria-hidden="true" />
+              <div className="trad-edge trad-edge-2" aria-hidden="true" />
+              <Tabletop />
+              {moroccan.map((p, i) => plate(p, 'a', i))}
+              {brunch.map((p, i) => plate(p, 'b', i))}
+            </div>
           </div>
         </div>
       </div>
