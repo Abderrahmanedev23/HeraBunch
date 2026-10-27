@@ -19,6 +19,53 @@ const brunch = [
   { dish: 'coffee', x: 58, y: 50, r: 0, s: 0.6 },
 ]
 
+// A round Moroccan mosaic table seen from above: a band of zellige stars
+// around a plain plaster top.
+function Tabletop() {
+  return (
+    <svg className="trad-top" viewBox="0 0 100 100" aria-hidden="true">
+      <defs>
+        <pattern id="trad-zellige" width="6" height="6" patternUnits="userSpaceOnUse">
+          <rect width="6" height="6" fill="#2F6E68" />
+          <rect x="1.7" y="1.7" width="2.6" height="2.6" fill="#F4E6D2" />
+          <rect x="1.7" y="1.7" width="2.6" height="2.6" fill="#F4E6D2" transform="rotate(45 3 3)" />
+          <circle cx="3" cy="3" r="0.6" fill="#C06E4D" />
+          <circle r="0.7" fill="#E9B48A" />
+          <circle cx="6" r="0.7" fill="#E9B48A" />
+          <circle cy="6" r="0.7" fill="#E9B48A" />
+          <circle cx="6" cy="6" r="0.7" fill="#E9B48A" />
+        </pattern>
+        <radialGradient id="trad-plaster">
+          <stop offset="0" stopColor="#F7E9D3" />
+          <stop offset="0.75" stopColor="#EFDBBD" />
+          <stop offset="1" stopColor="#E4C8A2" />
+        </radialGradient>
+      </defs>
+      <circle cx="50" cy="50" r="50" fill="#9C5236" />
+      <circle cx="50" cy="50" r="48.6" fill="url(#trad-zellige)" />
+      <circle cx="50" cy="50" r="41.6" fill="#C06E4D" />
+      <circle cx="50" cy="50" r="40.8" fill="url(#trad-plaster)" />
+    </svg>
+  )
+}
+
+// Wrought-iron base. It hangs below the tabletop in 3D, so it shows while the
+// camera is low and disappears under the table once it looks straight down.
+function Base() {
+  return (
+    <svg className="trad-base" viewBox="0 0 100 140" aria-hidden="true">
+      <g fill="none" stroke="#3A2A22" strokeWidth="4" strokeLinecap="round">
+        <path d="M50 0V112" />
+        <path d="M28 4C34 18 44 22 50 22S66 18 72 4" />
+        <path d="M50 34C38 44 38 60 50 66C62 60 62 44 50 34Z" />
+        <path d="M50 112C50 126 34 132 18 136M50 112C50 126 66 132 82 136" />
+      </g>
+      <circle cx="18" cy="136" r="4" fill="#3A2A22" />
+      <circle cx="82" cy="136" r="4" fill="#3A2A22" />
+    </svg>
+  )
+}
+
 export function Traditions() {
   const root = useRef()
   const { t } = useLang()
@@ -26,16 +73,24 @@ export function Traditions() {
   useGsap(
     root,
     () => {
+      gsap.set('.trad-plate', { z: 2 })
       const tl = gsap.timeline({
         defaults: { ease: 'power3.out' },
-        scrollTrigger: { trigger: root.current, start: 'top top', end: '+=160%', scrub: 0.8, pin: true },
+        scrollTrigger: { trigger: root.current, start: 'top top', end: '+=200%', scrub: 0.8, pin: true },
       })
-      tl.from('.trad-table', { scale: 0.6, opacity: 0, duration: 1 }, 0)
-        .from('.trad-plate.from-a', { xPercent: -420, yPercent: 40, rotate: -40, stagger: 0.12, duration: 1.4 }, 0.1)
-        .from('.trad-plate.from-b', { xPercent: 420, yPercent: 40, rotate: 40, stagger: 0.12, duration: 1.4 }, 0.1)
-        .from('.trad-side', { opacity: 0, y: 20, stagger: 0.2, duration: 0.6 }, 0.2)
-        .from('.trad-title .line-2', { yPercent: 110, duration: 0.8 }, 1.3)
-        .from('.trad-body', { opacity: 0, y: 20, duration: 0.6 }, 1.6)
+      // The camera starts low, at the table's side, and rises until it looks straight down.
+      tl.fromTo(
+        '.trad-ring',
+        { rotationX: 62, rotation: -18, scale: 0.86, yPercent: -10 },
+        { rotationX: 0, rotation: 0, scale: 1, yPercent: 0, duration: 1.6, ease: 'power2.inOut' },
+        0.35,
+      )
+        // Plates are served from both sides while the camera moves.
+        .from('.trad-plate.from-a', { xPercent: -420, yPercent: 40, rotate: -40, stagger: 0.12, duration: 1.2 }, 0)
+        .from('.trad-plate.from-b', { xPercent: 420, yPercent: 40, rotate: 40, stagger: 0.12, duration: 1.2 }, 0)
+        .from('.trad-title .line-2', { yPercent: 110, duration: 0.8 }, 1.4)
+        .from('.trad-key', { opacity: 0, y: 16, stagger: 0.15, duration: 0.5 }, 1.5)
+        .from('.trad-body', { opacity: 0, y: 20, duration: 0.6 }, 1.7)
     },
     [t],
   )
@@ -70,13 +125,29 @@ export function Traditions() {
         </h2>
       </div>
       <div className="trad-stage">
-        <p className="trad-side trad-side-a">{t.trad.left}</p>
-        <p className="trad-side trad-side-b">{t.trad.right}</p>
-        <div className="trad-ring">
-          <div className="trad-table" />
-          {moroccan.map((p, i) => plate(p, 'a', i))}
-          {brunch.map((p, i) => plate(p, 'b', i))}
+        <div className="trad-scene">
+          <div className="trad-ring">
+            <div className="trad-floor" aria-hidden="true" />
+            <Base />
+            <div className="trad-edge" aria-hidden="true" />
+            <div className="trad-edge trad-edge-2" aria-hidden="true" />
+            <Tabletop />
+            {moroccan.map((p, i) => plate(p, 'a', i))}
+            {brunch.map((p, i) => plate(p, 'b', i))}
+          </div>
         </div>
+      </div>
+      <div className="trad-legend">
+        <p className="trad-key trad-key-a">
+          <i aria-hidden="true" />
+          <b>{t.menu.cats.moroccan}</b>
+          <span>{t.trad.left}</span>
+        </p>
+        <p className="trad-key trad-key-b">
+          <i aria-hidden="true" />
+          <b>{t.trad.brunch}</b>
+          <span>{t.trad.right}</span>
+        </p>
       </div>
       <p className="trad-body">{t.trad.body}</p>
     </section>

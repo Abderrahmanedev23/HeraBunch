@@ -629,8 +629,8 @@ button:hover .roll-line span {
   height: 100svh;
   min-height: 640px;
   display: grid;
-  grid-template-rows: auto 1fr auto;
-  padding: 96px var(--gutter) 40px;
+  grid-template-rows: auto 1fr auto auto;
+  padding: 88px var(--gutter) 32px;
   overflow: hidden;
   background: var(--cream);
 }
@@ -672,30 +672,67 @@ button:hover .roll-line span {
   container-type: size;
 }
 
-.trad-ring {
+/* A 3D scene: the camera looks at the table from its side, then rises to look straight down. */
+.trad-scene {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  width: min(54vh, 84vw);
-  width: min(94cqh, 84vw);
-  aspect-ratio: 1;
-  translate: -50% -50%;
+  inset: 0;
+  perspective: calc(min(94cqh, 84vw) * 2.6);
+  perspective-origin: 50% 30%;
 }
 
-.trad-table {
+/* Centred with margins rather than a translate, so the camera's transform can't shift it. */
+.trad-ring {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: min(54vh, 84vw);
+  height: min(54vh, 84vw);
+  width: min(94cqh, 84vw);
+  height: min(94cqh, 84vw);
+  transform-style: preserve-3d;
+}
+
+.trad-top {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Two darker discs under the top give the table its thickness. */
+.trad-edge {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: radial-gradient(circle, #e9cfaa 0%, #dcb88a 70%, #c99d6b 100%);
-  box-shadow: inset 0 0 0 14px rgba(255, 255, 255, 0.18), 0 40px 60px -20px rgba(120, 70, 30, 0.35);
+  background: #8a4630;
+  transform: translateZ(-9px);
 }
 
-.trad-table::after {
-  content: '';
+.trad-edge-2 {
+  background: #a65a3d;
+  transform: translateZ(-4.5px);
+}
+
+/* The iron base hangs straight down from the centre of the table. */
+.trad-base {
   position: absolute;
-  inset: 18%;
+  left: 50%;
+  top: 50%;
+  width: 44%;
+  height: 62%;
+  translate: -50% 0;
+  transform-origin: 50% 0;
+  transform: translateZ(-10px) rotateX(-90deg);
+}
+
+/* Its shadow on the floor, level with the bottom of the base. */
+.trad-floor {
+  position: absolute;
+  inset: -12%;
   border-radius: 50%;
-  border: 1px dashed rgba(255, 255, 255, 0.5);
+  background: radial-gradient(closest-side, rgba(70, 35, 20, 0.38), rgba(70, 35, 20, 0));
+  transform: translateZ(calc(min(94cqh, 84vw) * -0.62));
 }
 
 .trad-plate {
@@ -719,6 +756,15 @@ button:hover .roll-line span {
   box-shadow: 0 10px 22px -8px rgba(43, 29, 20, 0.4), inset 0 0 0 1px rgba(43, 29, 20, 0.06);
 }
 
+/* Plate rims show which table they come from: terracotta for Moroccan, mint for brunch. */
+.trad-plate.from-a .trad-photo {
+  box-shadow: inset 0 0 0 2px var(--terracotta), 0 10px 22px -8px rgba(43, 29, 20, 0.4);
+}
+
+.trad-plate.from-b .trad-photo {
+  box-shadow: inset 0 0 0 2px var(--mint), 0 10px 22px -8px rgba(43, 29, 20, 0.4);
+}
+
 .trad-photo img {
   display: block;
   width: 100%;
@@ -727,35 +773,82 @@ button:hover .roll-line span {
   object-fit: cover;
 }
 
-.trad-side {
-  position: absolute;
-  top: 6%;
-  max-width: 220px;
+/* Laid out left to right in every language, matching the plates: Moroccan on the left, brunch on the right. */
+.trad-legend {
+  position: relative;
+  z-index: 20;
+  direction: ltr;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px 44px;
+  padding-top: 14px;
+}
+
+.trad-key {
+  display: grid;
+  grid-template-columns: 10px 1fr;
+  align-content: start;
+  align-items: center;
+  gap: 2px 8px;
+  max-width: 280px;
+}
+
+.trad-key i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--terracotta);
+}
+
+.trad-key b {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+}
+
+.trad-key span {
+  grid-column: 1 / -1;
   font-family: var(--serif);
   font-style: italic;
-  font-size: 18px;
+  font-size: 17px;
   line-height: 1.3;
   color: var(--muted);
-  z-index: 20;
 }
 
-.trad-side-a {
-  inset-inline-start: 0;
+.trad-key-b i {
+  background: var(--mint);
 }
 
-.trad-side-b {
-  inset-inline-end: 0;
-  text-align: end;
+.trad-key-b b {
+  color: var(--mint);
+}
+
+[dir='rtl'] .trad-key {
+  direction: rtl;
+}
+
+:root[lang='ar'] .trad-key b {
+  font-size: 14px;
+  letter-spacing: 0;
+}
+
+:root[lang='ar'] .trad-key span {
+  font-style: normal;
 }
 
 .trad-body {
-  max-width: 640px;
-  padding-top: 16px;
-  margin: 0 auto;
-  text-align: center;
-  color: var(--muted);
   position: relative;
   z-index: 20;
+  max-width: 620px;
+  margin: 0 auto;
+  padding-top: 12px;
+  text-align: center;
+  color: var(--muted);
+  line-height: 1.6;
 }
 
 /* ---------- Menu ---------- */
@@ -1872,17 +1965,18 @@ html.header-hidden .tabs-bar {
     top: -52px;
   }
 
-  .trad-side {
-    position: static;
-    max-width: none;
-    font-size: 15px;
+  .trad-legend {
+    flex-wrap: nowrap;
+    gap: 10px 16px;
   }
 
-  .trad-stage {
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-    align-items: flex-start;
+  .trad-key {
+    flex: 1 1 0;
+    max-width: none;
+  }
+
+  .trad-key span {
+    font-size: 14px;
   }
 }
 
@@ -1892,11 +1986,11 @@ html.header-hidden .tabs-bar {
   }
 
   .trad {
-    padding-top: 84px;
+    padding-top: 80px;
   }
 
   .trad-body {
-    font-size: 14px;
+    font-size: 13.5px;
   }
 }
 

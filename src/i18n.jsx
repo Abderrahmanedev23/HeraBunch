@@ -25,6 +25,7 @@ const strings = {
     },
     trad: {
       label: 'Our story',
+      brunch: 'Brunch',
       title: ['Two traditions,', 'one table.'],
       left: 'The Moroccan breakfast we grew up with',
       right: 'The brunch classics the world loves',
@@ -100,6 +101,7 @@ const strings = {
     },
     trad: {
       label: 'Notre histoire',
+      brunch: 'Brunch',
       title: ['Deux traditions,', 'une seule table.'],
       left: 'Le petit-déjeuner marocain de notre enfance',
       right: 'Les classiques du brunch que le monde adore',
@@ -175,6 +177,7 @@ const strings = {
     },
     trad: {
       label: 'قصتنا',
+      brunch: 'برانش',
       title: ['تقليدان،', 'ومائدة واحدة.'],
       left: 'الفطور المغربي الذي كبرنا عليه',
       right: 'كلاسيكيات البرانش التي يحبها العالم',
