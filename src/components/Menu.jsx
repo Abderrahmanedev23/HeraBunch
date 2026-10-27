@@ -1,17 +1,30 @@
-import { useEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
+import { Flip } from 'gsap/Flip'
 import { useLang } from '../i18n'
 import { categories, menu } from '../data/menu'
-import { finePointer, gsap, reducedMotion, ScrollTrigger, useGsap } from '../lib/motion'
+import { gsap, reducedMotion, ScrollTrigger, useGsap } from '../lib/motion'
 import { Dish } from './Dish'
 import { Label } from './Bits'
 
+gsap.registerPlugin(Flip)
+
+const ARCH_CLOSED = 'inset(100% 0% 0% 0% round 999px 999px 18px 18px)'
+const ARCH_OPEN = 'inset(0% 0% 0% 0% round 999px 999px 18px 18px)'
+
+// Shows a card in its final state straight away (used before filtering).
+function settle(card) {
+  if (card.dataset.shown) return
+  card.dataset.shown = '1'
+  gsap.set(card.querySelector('.dish-photo'), { clipPath: ARCH_OPEN })
+  gsap.set(card.querySelector('.dish-img'), { scale: 1 })
+  gsap.set(card.querySelector('.dish-body'), { y: 0, opacity: 1 })
+}
+
 export function Menu() {
   const root = useRef()
-  const preview = useRef()
+  const flipState = useRef(null)
   const { t } = useLang()
   const [filter, setFilter] = useState('all')
-  const [hover, setHover] = useState(null)
-  const items = filter === 'all' ? menu : menu.filter((m) => m.category === filter)
 
   useGsap(
     root,
@@ -23,60 +36,89 @@ export function Menu() {
         ease: 'expo.out',
         scrollTrigger: { trigger: '.menu-title', start: 'top 85%' },
       })
-      // Rows rise in as they scroll into view.
-      gsap.set('.menu-row', { y: 40, opacity: 0 })
-      ScrollTrigger.batch('.menu-row', {
+
+      // Each arch opens around its photo as the card scrolls into view.
+      const cards = gsap.utils.toArray('.dish')
+      cards.forEach((card) => delete card.dataset.shown)
+      gsap.set('.dish-photo', { clipPath: ARCH_CLOSED })
+      gsap.set('.dish-img', { scale: 1.35 })
+      gsap.set('.dish-body', { y: 24, opacity: 0 })
+      ScrollTrigger.batch(cards, {
         start: 'top 92%',
         once: true,
-        onEnter: (rows) => gsap.to(rows, { y: 0, opacity: 1, stagger: 0.06, duration: 0.8, ease: 'power3.out', overwrite: true }),
+        onEnter: (batch) => {
+          const fresh = batch.filter((card) => !card.dataset.shown)
+          if (!fresh.length) return
+          fresh.forEach((card) => (card.dataset.shown = '1'))
+          const pick = (sel) => fresh.map((card) => card.querySelector(sel))
+          gsap.to(pick('.dish-photo'), { clipPath: ARCH_OPEN, duration: 1.3, ease: 'expo.out', stagger: 0.09 })
+          gsap.to(pick('.dish-img'), { scale: 1, duration: 1.8, ease: 'expo.out', stagger: 0.09 })
+          gsap.to(pick('.dish-body'), { y: 0, opacity: 1, duration: 1, ease: 'power3.out', stagger: 0.09, delay: 0.2 })
+        },
+      })
+
+      // Photos drift slightly inside their frames while scrolling.
+      gsap.utils.toArray('.dish-img').forEach((img) => {
+        gsap.fromTo(
+          img,
+          { yPercent: -5 },
+          {
+            yPercent: 5,
+            ease: 'none',
+            scrollTrigger: { trigger: img.closest('.dish'), start: 'top bottom', end: 'bottom top', scrub: true },
+          },
+        )
       })
     },
     [t],
   )
 
-  // Rows rise in again whenever the filter changes.
-  const shownFilter = useRef(filter)
-  useEffect(() => {
-    if (shownFilter.current === filter) return
-    shownFilter.current = filter
-    if (reducedMotion) return
-    gsap.fromTo(
-      root.current.querySelectorAll('.menu-row'),
-      { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, stagger: 0.04, duration: 0.7, ease: 'power3.out', overwrite: true },
-    )
+  const choose = (c) => {
+    if (c === filter) return
+    if (!reducedMotion) {
+      const cards = root.current.querySelectorAll('.dish')
+      cards.forEach(settle)
+      flipState.current = Flip.getState(cards)
+    }
+    setFilter(c)
+  }
+
+  // Cards glide to their new places when the filter changes.
+  useLayoutEffect(() => {
+    const state = flipState.current
+    if (!state) return
+    flipState.current = null
+    Flip.from(state, {
+      targets: root.current.querySelectorAll('.dish'),
+      duration: 0.75,
+      ease: 'power3.inOut',
+      absolute: true,
+      stagger: 0.025,
+      onEnter: (els) => gsap.fromTo(els, { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.6, delay: 0.2 }),
+      onLeave: (els) => gsap.to(els, { opacity: 0, scale: 0.85, duration: 0.4 }),
+      onComplete: () => ScrollTrigger.refresh(),
+    })
   }, [filter])
 
-  // The dish preview follows the pointer.
-  useEffect(() => {
-    if (!finePointer) return
-    const el = preview.current
-    const x = gsap.quickTo(el, 'x', { duration: 0.6, ease: 'power3' })
-    const y = gsap.quickTo(el, 'y', { duration: 0.6, ease: 'power3' })
-    const move = (e) => {
-      x(e.clientX)
-      y(e.clientY)
-    }
-    window.addEventListener('pointermove', move)
-    return () => window.removeEventListener('pointermove', move)
-  }, [])
-
   const count = (c) => (c === 'all' ? menu.length : menu.filter((m) => m.category === c).length)
+  let shown = 0
 
   return (
     <section className="menu" id="menu" ref={root}>
       <div className="menu-head">
-        <Label>{t.menu.label}</Label>
-        <h2 className="menu-title">
-          {t.menu.title.split(' ').map((w, i) => (
-            <span key={i} className="line">
-              <span className="w">{w}</span>
-            </span>
-          ))}
-        </h2>
+        <div>
+          <Label>{t.menu.label}</Label>
+          <h2 className="menu-title">
+            {t.menu.title.split(' ').map((w, i) => (
+              <span key={i} className="line">
+                <span className="w">{w}</span>
+              </span>
+            ))}
+          </h2>
+        </div>
         <div className="pills" role="group" aria-label={t.menu.label}>
           {['all', ...categories].map((c) => (
-            <button key={c} className={`pill ${filter === c ? 'is-active' : ''}`} onClick={() => setFilter(c)} aria-pressed={filter === c}>
+            <button key={c} className={`pill ${filter === c ? 'is-active' : ''}`} onClick={() => choose(c)} aria-pressed={filter === c}>
               {c === 'all' ? t.menu.all : t.menu.cats[c]}
               <sup>{count(c)}</sup>
             </button>
@@ -84,37 +126,42 @@ export function Menu() {
         </div>
       </div>
 
-      <ul className="menu-list" onPointerLeave={() => setHover(null)}>
-        {items.map((m, i) => {
+      <div className="dishes">
+        {menu.map((m, i) => {
           const [name, desc] = t.menu.items[m.id]
+          const visible = filter === 'all' || m.category === filter
+          // Every second visible card sits a little lower, for a staggered rhythm.
+          const low = visible && shown++ % 2 === 1
           return (
-            <li key={m.id} className="menu-row" onPointerEnter={() => setHover(m)}>
-              <span className="menu-num">{String(i + 1).padStart(2, '0')}</span>
-              <span className="menu-name">{name}</span>
-              <span className="menu-desc">{desc}</span>
-              {m.price != null ? (
-                <span className="menu-end is-price" dir="ltr">
-                  {m.price} DH
-                </span>
-              ) : (
-                <span className="menu-end">{t.menu.cats[m.category]}</span>
-              )}
-              <Dish name={m.dish} className="menu-thumb" />
-            </li>
+            <article key={m.id} className={`dish ${visible ? '' : 'is-out'} ${low ? 'is-low' : ''}`}>
+              <div className="dish-photo">
+                <div className="dish-zoom">
+                  {m.photo ? (
+                    <img className="dish-img" src={m.photo} alt={name} loading="lazy" width="720" height="900" />
+                  ) : (
+                    <div className="dish-img dish-illus">
+                      <Dish name={m.dish} title={name} />
+                    </div>
+                  )}
+                </div>
+                <span className="dish-tag">{t.menu.cats[m.category]}</span>
+              </div>
+              <div className="dish-body">
+                <div className="dish-row">
+                  <span className="dish-num">{String(i + 1).padStart(2, '0')}</span>
+                  <h3 className="dish-name">{name}</h3>
+                  {m.price != null && (
+                    <span className="dish-price" dir="ltr">
+                      {m.price} DH
+                    </span>
+                  )}
+                </div>
+                <p className="dish-desc">{desc}</p>
+              </div>
+            </article>
           )
         })}
-      </ul>
-
-      {finePointer && (
-        <div className={`menu-preview ${hover ? 'is-on' : ''}`} ref={preview} aria-hidden="true">
-          <div className="menu-preview-inner">
-            {menu.map((m) => (
-              <Dish key={m.id} name={m.dish} className={hover?.id === m.id ? 'is-current' : ''} />
-            ))}
-            <span className="menu-preview-label">{hover ? t.menu.items[hover.id][0] : ''}</span>
-          </div>
-        </div>
-      )}
+      </div>
     </section>
   )
 }

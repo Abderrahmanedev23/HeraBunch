@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { useLang } from '../i18n'
 import { gsap, useGsap } from '../lib/motion'
+import { site } from '../data/site'
 import { Dish } from './Dish'
 import { Label } from './Bits'
 
@@ -45,7 +46,13 @@ export function Traditions() {
       className={`trad-plate from-${side}`}
       style={{ left: `${p.x}%`, top: `${p.y}%`, '--s': p.s, '--r': `${p.r}deg`, zIndex: 10 - i }}
     >
-      <Dish name={p.dish} title={t.menu.items[p.dish][0]} />
+      {site.media.table?.[p.dish] ? (
+        <div className="trad-photo">
+          <img src={site.media.table[p.dish]} alt={t.menu.items[p.dish][0]} loading="lazy" width="420" height="420" />
+        </div>
+      ) : (
+        <Dish name={p.dish} title={t.menu.items[p.dish][0]} />
+      )}
     </div>
   )
 

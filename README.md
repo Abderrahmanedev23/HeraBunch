@@ -10,7 +10,7 @@ Website for **Hera Brunch**, Rabat’s home of breakfast.
 4. **Intro:** the homepage text fills in word by word as you scroll.
 5. **Two traditions, one table:** a pinned scene. Moroccan plates slide in from one side and brunch plates from the other, and they meet on one table.
 6. **Tile band:** a strip of zellige stars that slides sideways as you scroll.
-7. **Menu:** filter pills with item counts, rows that rise in, and a dish preview that follows the cursor.
+7. **Menu:** photo cards framed in Moroccan arches, in a staggered grid. Each arch opens around its photo as it scrolls in, and filtering glides the cards to their new places.
 8. **Every morning:** the section rises in as an arch, and three clips open up inside it: honey over pancakes, fresh orange juice, and tea poured from height.
 9. **Marquee:** a looping text band that reacts to scroll speed.
 10. **Visit:** live Rabat time, open/closed status, hours, directions and a spinning "Book a table" badge.
@@ -43,7 +43,7 @@ It deploys to any static host (Vercel, Netlify, Cloudflare Pages). The build com
 | What | File |
 |---|---|
 | Hours, address, phone, links, videos | `src/data/site.js` |
-| Menu items and prices | `src/data/menu.js` |
+| Menu items, prices and photos | `src/data/menu.js` |
 | All text, in EN / FR / AR | `src/i18n.jsx` |
 | Colours and fonts | top of `src/styles.css` |
 | Sections | `src/components/` |
@@ -55,15 +55,15 @@ It deploys to any static host (Vercel, Netlify, Cloudflare Pages). The build com
 - [ ] Add prices to `src/data/menu.js`. Rows show the price as soon as one is set.
 - [ ] Add Glovo or booking links if Hera has them.
 - [ ] Replace the text wordmark with the real logo (SVG) in `src/components/Bits.jsx`.
-- [ ] Replace the stock clips and illustrated dishes with photos and videos of Hera’s own plates (`site.media` in `src/data/site.js`).
+- [ ] Replace the stand-in stock photos and clips with Hera’s own: menu photos in `src/data/menu.js`, table plates and videos in `site.media` (`src/data/site.js`). The Moroccan dishes currently use look-alike photos.
 - [ ] Have a native speaker review the French and Arabic text.
 - [ ] Keep `CREDITS.md` up to date for any stock photo or video, and use only items whose licence allows commercial use.
 
 ## Media
 
-Videos and images live in `public/media/` and are wired up in `site.media` (`src/data/site.js`). Any slot set to `null` falls back to the built-in illustration. Clips play muted, only while on screen, and stay on their poster frame for visitors who prefer reduced motion. Sources and licences are listed in `CREDITS.md`.
+Videos and images live in `public/media/`. Menu photos are set per item in `src/data/menu.js`; videos and table plates are in `site.media` (`src/data/site.js`). Anything left empty falls back to the built-in illustration. Clips play muted, only while on screen, and stay on their poster frame for visitors who prefer reduced motion. Sources and licences are listed in `CREDITS.md`.
 
-To add a clip, export it small: a square or 4:5 crop, no audio, H.264 MP4 at around 720–1080 px.
+To add a clip, export it small: a square or 4:5 crop, no audio, H.264 MP4 at around 720–1080 px. Menu photos work best as 4:5 portraits around 720×900 px; table plates as squares around 420 px, shot from above.
 
 ## Brand
 

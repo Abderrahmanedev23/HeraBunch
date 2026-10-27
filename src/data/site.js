@@ -28,5 +28,16 @@ export const site = {
       { video: '/media/moment-juice.mp4', poster: '/media/moment-juice.jpg' },
       { video: '/media/moment-tea.mp4', poster: '/media/moment-tea.jpg' },
     ],
+    // Round photos for the plates on the "Two traditions" table, by dish.
+    table: {
+      msemen: '/media/table/msemen.webp',
+      baghrir: '/media/table/baghrir.webp',
+      amlou: '/media/table/amlou.webp',
+      tea: '/media/table/tea.webp',
+      pancakes: '/media/table/pancakes.webp',
+      benedict: '/media/table/benedict.webp',
+      avocado: '/media/table/avocado.webp',
+      coffee: '/media/table/coffee.webp',
+    },
   },
 }

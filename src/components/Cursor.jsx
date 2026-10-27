@@ -13,7 +13,7 @@ export function Cursor() {
     const move = (e) => {
       x(e.clientX)
       y(e.clientY)
-      el.classList.toggle('is-big', !!e.target.closest('a, button, .menu-row'))
+      el.classList.toggle('is-big', !!e.target.closest('a, button, .dish'))
     }
     window.addEventListener('pointermove', move)
     document.documentElement.classList.add('has-cursor')
