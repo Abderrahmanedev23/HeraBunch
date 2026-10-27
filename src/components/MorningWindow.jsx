@@ -100,7 +100,7 @@ export function MorningWindow() {
     () => {
       const tl = gsap.timeline({
         defaults: { ease: 'none' },
-        scrollTrigger: { trigger: root.current, start: 'top top', end: '+=240%', scrub: 0.8, pin: true },
+        scrollTrigger: { trigger: root.current, start: 'top top', end: '+=160%', scrub: 0.6, pin: true },
       })
       tl.to('.win-fade', { opacity: 0, duration: 0.3 }, 0)
         .fromTo('.win-shutter-l', { rotateY: 0 }, { rotateY: -112, duration: 1.2, ease: 'power2.inOut' }, 0.3)
@@ -114,9 +114,9 @@ export function MorningWindow() {
         .fromTo('.win-dust', { opacity: 0 }, { opacity: 1, duration: 1 }, 1)
         .fromTo('.win-line-a', { opacity: 1, y: 0 }, { opacity: 0, y: -24, duration: 0.4 }, 0.7)
         .fromTo('.win-line-b', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5 }, 1)
-        .to('.win-caption, .win-rays, .win-dust, .win-sill-things', { opacity: 0, duration: 0.4 }, 2.1)
-        .fromTo('.win-stage', { scale: 1 }, { scale: 7, duration: 1.3, ease: 'power2.in' }, 2.1)
-        .fromTo('.win-flood', { opacity: 0 }, { opacity: 1, duration: 0.45 }, 2.95)
+        .to('.win-caption, .win-rays, .win-dust, .win-sill-things', { opacity: 0, duration: 0.35 }, 1.75)
+        .fromTo('.win-stage', { scale: 1 }, { scale: 7, duration: 1.1, ease: 'power2.in' }, 1.75)
+        .fromTo('.win-flood', { opacity: 0 }, { opacity: 1, duration: 0.4 }, 2.45)
     },
     [t],
   )
