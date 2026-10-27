@@ -102,6 +102,16 @@ export function Moments() {
   useGsap(
     root,
     () => {
+      // The section rises in as an arch that flattens out.
+      gsap.fromTo(
+        root.current,
+        { clipPath: 'inset(0% 0% 0% 0% round 50vw 50vw 0px 0px)' },
+        {
+          clipPath: 'inset(0% 0% 0% 0% round 0vw 0vw 0px 0px)',
+          ease: 'none',
+          scrollTrigger: { trigger: root.current, start: 'top bottom', end: 'top 15%', scrub: true },
+        },
+      )
       root.current.querySelectorAll('.moment').forEach((el, i) => {
         const tl = gsap.timeline({
           scrollTrigger: { trigger: el, start: 'top 85%', end: 'bottom 45%', scrub: 0.6 },

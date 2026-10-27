@@ -8,8 +8,9 @@ export const languages = [
 
 const strings = {
   en: {
-    nav: { menu: 'Menu', story: 'Our story', visit: 'Visit', book: 'Book a table' },
+    nav: { menu: 'Menu', story: 'Our story', visit: 'Visit', book: 'Book a table', top: 'Back to top' },
     loader: 'Good morning',
+    window: { a: 'Rabat is waking up.', b: 'The shutters open.' },
     hero: {
       kicker: 'Brunch house · Rabat',
       title: ['Good mornings', 'start here.'],
@@ -81,8 +82,9 @@ const strings = {
   },
 
   fr: {
-    nav: { menu: 'Carte', story: 'Notre histoire', visit: 'Venir', book: 'Réserver' },
+    nav: { menu: 'Carte', story: 'Notre histoire', visit: 'Venir', book: 'Réserver', top: 'Haut de page' },
     loader: 'Bonjour',
+    window: { a: 'Rabat se réveille.', b: 'Les volets s’ouvrent.' },
     hero: {
       kicker: 'Maison de brunch · Rabat',
       title: ['Les bons matins', 'commencent ici.'],
@@ -154,8 +156,9 @@ const strings = {
   },
 
   ar: {
-    nav: { menu: 'القائمة', story: 'قصتنا', visit: 'زورونا', book: 'احجز طاولة' },
+    nav: { menu: 'القائمة', story: 'قصتنا', visit: 'زورونا', book: 'احجز طاولة', top: 'العودة إلى الأعلى' },
     loader: 'صباح الخير',
+    window: { a: 'الرباط تستيقظ.', b: 'تُفتح النوافذ.' },
     hero: {
       kicker: 'بيت البرانش · الرباط',
       title: ['الصباحات الجميلة', 'تبدأ من هنا.'],

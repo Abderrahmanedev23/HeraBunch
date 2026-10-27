@@ -2,7 +2,8 @@ import { useEffect, useRef } from 'react'
 import { finePointer } from '../lib/motion'
 
 // Soft steam rising from the cup. Wisps drift away from the pointer.
-export function Steam({ originX = 0.5, originY = 0.72 }) {
+// `scale` shrinks the wisps for small cups.
+export function Steam({ originX = 0.5, originY = 0.72, scale = 1 }) {
   const ref = useRef()
 
   useEffect(() => {
@@ -27,9 +28,9 @@ export function Steam({ originX = 0.5, originY = 0.72 }) {
     const spawn = () => ({
       x: w * originX + (Math.random() - 0.5) * w * 0.3,
       y: h * originY,
-      vx: (Math.random() - 0.5) * 0.15,
-      vy: -0.7 - Math.random() * 0.6,
-      r: 6 + Math.random() * 10,
+      vx: (Math.random() - 0.5) * 0.15 * scale,
+      vy: (-0.7 - Math.random() * 0.6) * scale,
+      r: (6 + Math.random() * 10) * scale,
       life: 0,
       max: 220 + Math.random() * 140,
       seed: Math.random() * 1000,
@@ -39,22 +40,23 @@ export function Steam({ originX = 0.5, originY = 0.72 }) {
       raf = requestAnimationFrame(tick)
       if (!visible) return
       ctx.clearRect(0, 0, w, h)
-      if (parts.length < 70 && Math.random() < 0.5) parts.push(spawn())
+      if (parts.length < 70 * scale && Math.random() < 0.5) parts.push(spawn())
       for (let i = parts.length - 1; i >= 0; i--) {
         const p = parts[i]
         p.life++
-        const sway = Math.sin(time * 0.0012 + p.seed + p.life * 0.02) * 0.35
+        const sway = Math.sin(time * 0.0012 + p.seed + p.life * 0.02) * 0.35 * Math.max(scale, 0.5)
         const dx = p.x - pointer.x
         const dy = p.y - pointer.y
         const d2 = dx * dx + dy * dy
-        if (d2 < 14000) {
-          const f = (1 - d2 / 14000) * 0.6
+        const reach = 14000 * scale * scale
+        if (d2 < reach) {
+          const f = (1 - d2 / reach) * 0.6 * scale
           p.vx += (dx / Math.sqrt(d2 + 1)) * f
         }
         p.vx *= 0.96
         p.x += p.vx + sway
         p.y += p.vy
-        p.r += 0.22
+        p.r += 0.22 * scale
         const k = p.life / p.max
         const alpha = Math.sin(Math.PI * Math.min(k, 1)) * 0.13
         if (k >= 1) {
@@ -89,7 +91,7 @@ export function Steam({ originX = 0.5, originY = 0.72 }) {
       window.removeEventListener('resize', resize)
       window.removeEventListener('pointermove', onMove)
     }
-  }, [originX, originY])
+  }, [originX, originY, scale])
 
   return <canvas className="steam" ref={ref} aria-hidden="true" />
 }

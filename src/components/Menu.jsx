@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLang } from '../i18n'
 import { categories, menu } from '../data/menu'
-import { finePointer, gsap, reducedMotion, useGsap } from '../lib/motion'
+import { finePointer, gsap, reducedMotion, ScrollTrigger, useGsap } from '../lib/motion'
 import { Dish } from './Dish'
 import { Label } from './Bits'
 
@@ -23,17 +23,27 @@ export function Menu() {
         ease: 'expo.out',
         scrollTrigger: { trigger: '.menu-title', start: 'top 85%' },
       })
+      // Rows rise in as they scroll into view.
+      gsap.set('.menu-row', { y: 40, opacity: 0 })
+      ScrollTrigger.batch('.menu-row', {
+        start: 'top 92%',
+        once: true,
+        onEnter: (rows) => gsap.to(rows, { y: 0, opacity: 1, stagger: 0.06, duration: 0.8, ease: 'power3.out', overwrite: true }),
+      })
     },
     [t],
   )
 
-  // Rows rise in whenever the filter changes.
+  // Rows rise in again whenever the filter changes.
+  const shownFilter = useRef(filter)
   useEffect(() => {
+    if (shownFilter.current === filter) return
+    shownFilter.current = filter
     if (reducedMotion) return
     gsap.fromTo(
       root.current.querySelectorAll('.menu-row'),
       { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, stagger: 0.04, duration: 0.7, ease: 'power3.out' },
+      { y: 0, opacity: 1, stagger: 0.04, duration: 0.7, ease: 'power3.out', overwrite: true },
     )
   }, [filter])
 

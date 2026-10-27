@@ -6,13 +6,17 @@ Website for **Hera Brunch**, Rabat’s home of breakfast.
 
 1. **Loader:** a clock runs from 06:00 to 08:00 while a glass of mint tea fills.
 2. **Hero:** "Good mornings start here." A latte-art pour plays inside a Moroccan arch while a warm sun rises behind it.
-3. **Intro:** the homepage text fills in word by word as you scroll.
-4. **Two traditions, one table:** a pinned scene. Moroccan plates slide in from one side and brunch plates from the other, and they meet on one table.
-5. **Menu:** filter pills with item counts, a large typographic list, and a dish preview that follows the cursor.
-6. **Every morning:** three clips that open up as you scroll: honey over pancakes, fresh orange juice, and tea poured from height.
-7. **Marquee:** a looping text band that reacts to scroll speed.
-8. **Visit:** live Rabat time, open/closed status, hours, directions and a spinning "Book a table" badge.
-9. **Footer:** the sun sets behind a giant wordmark.
+3. **Morning window:** a pinned scene. Wooden shutters open onto Rabat at sunrise (the kasbah wall, Hassan Tower, palms and the sea), light and dust fill the room, then the view flies through the window into the next section.
+4. **Intro:** the homepage text fills in word by word as you scroll.
+5. **Two traditions, one table:** a pinned scene. Moroccan plates slide in from one side and brunch plates from the other, and they meet on one table.
+6. **Tile band:** a strip of zellige stars that slides sideways as you scroll.
+7. **Menu:** filter pills with item counts, rows that rise in, and a dish preview that follows the cursor.
+8. **Every morning:** the section rises in as an arch, and three clips open up inside it: honey over pancakes, fresh orange juice, and tea poured from height.
+9. **Marquee:** a looping text band that reacts to scroll speed.
+10. **Visit:** live Rabat time, open/closed status, hours, directions and a spinning "Book a table" badge.
+11. **Footer:** the sun sets behind a giant wordmark.
+
+Throughout the page, a small sun in the corner crosses the sky as you scroll and takes you back to the top when clicked. Section labels draw a short line as they appear.
 
 The site is in English, French and Arabic (right to left). It switches language automatically from the browser and has a switcher in the header.
 
