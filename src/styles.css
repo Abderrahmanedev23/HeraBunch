@@ -725,17 +725,22 @@ button:hover .roll-line span {
    crossed at right angles around the column, so it has four legs. */
 .trad-base {
   position: absolute;
-  left: 50%;
+  left: 28%;
   top: 50%;
   width: 44%;
   height: 62%;
-  translate: -50% 0;
   transform-origin: 50% 0;
   transform: translateZ(-10px) rotateZ(45deg) rotateX(-90deg);
 }
 
 .trad-base-b {
   transform: translateZ(-10px) rotateZ(-45deg) rotateX(-90deg);
+}
+
+.trad-base svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 /* Its shadow on the floor, level with the bottom of the base. */

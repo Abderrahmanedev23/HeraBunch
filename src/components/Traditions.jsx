@@ -54,16 +54,18 @@ function Tabletop() {
 // the table once it looks straight down.
 function Base({ className }) {
   return (
-    <svg className={`trad-base ${className}`} viewBox="0 0 100 140" aria-hidden="true">
-      <g fill="none" stroke="#3A2A22" strokeWidth="4" strokeLinecap="round">
-        <path d="M50 0V112" />
-        <path d="M28 4C34 18 44 22 50 22S66 18 72 4" />
-        <path d="M50 34C38 44 38 60 50 66C62 60 62 44 50 34Z" />
-        <path d="M50 112C50 126 34 132 18 136M50 112C50 126 66 132 82 136" />
-      </g>
-      <circle cx="18" cy="136" r="4" fill="#3A2A22" />
-      <circle cx="82" cy="136" r="4" fill="#3A2A22" />
-    </svg>
+    <div className={`trad-base ${className}`} aria-hidden="true">
+      <svg viewBox="0 0 100 140">
+        <g fill="none" stroke="#3A2A22" strokeWidth="4" strokeLinecap="round">
+          <path d="M50 0V112" />
+          <path d="M28 4C34 18 44 22 50 22S66 18 72 4" />
+          <path d="M50 34C38 44 38 60 50 66C62 60 62 44 50 34Z" />
+          <path d="M50 112C50 126 34 132 18 136M50 112C50 126 66 132 82 136" />
+        </g>
+        <circle cx="18" cy="136" r="4" fill="#3A2A22" />
+        <circle cx="82" cy="136" r="4" fill="#3A2A22" />
+      </svg>
+    </div>
   )
 }
 
