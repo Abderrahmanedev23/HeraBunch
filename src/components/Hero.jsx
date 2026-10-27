@@ -3,11 +3,13 @@ import { useLang } from '../i18n'
 import { gsap, reducedMotion, scrollTo, useGsap, words } from '../lib/motion'
 import { site } from '../data/site'
 import { Roll } from './Bits'
+import { AutoVideo } from './AutoVideo'
 import { Steam } from './Steam'
 
 export function Hero({ ready }) {
   const root = useRef()
   const { t } = useLang()
+  const { heroVideo, heroPoster } = site.media
 
   useGsap(
     root,
@@ -16,21 +18,27 @@ export function Hero({ ready }) {
       const tl = gsap.timeline({ defaults: { ease: 'expo.out' } })
       tl.from('.hero-title .w', { yPercent: 110, rotate: 4, duration: 1.4, stagger: 0.08 })
         .from('.hero-kicker, .hero-sub, .hero-actions', { y: 24, opacity: 0, duration: 1.1, stagger: 0.1 }, 0.4)
-        .fromTo('.hero-arch', { clipPath: 'inset(100% 0% 0% 0% round 999px 999px 0px 0px)' }, { clipPath: 'inset(0% 0% 0% 0% round 999px 999px 0px 0px)', duration: 1.6 }, 0)
-        .from('.hero-sun', { yPercent: 80, duration: 2.4, ease: 'power2.out' }, 0.1)
-        .from('.hero-cup', { y: 60, opacity: 0, duration: 1.4 }, 0.5)
+        .fromTo(
+          '.hero-arch',
+          { clipPath: 'inset(100% 0% 0% 0% round 999px 999px 0px 0px)' },
+          { clipPath: 'inset(0% 0% 0% 0% round 999px 999px 0px 0px)', duration: 1.6 },
+          0,
+        )
+        .from('.hero-media', { scale: 1.3, duration: 2.2 }, 0)
+        .from('.hero-glow', { yPercent: 50, opacity: 0, duration: 2.4, ease: 'power2.out' }, 0.1)
+      if (!heroVideo) {
+        tl.from('.hero-sun', { yPercent: 80, duration: 2.4, ease: 'power2.out' }, 0.1).from(
+          '.hero-cup',
+          { y: 60, opacity: 0, duration: 1.4 },
+          0.5,
+        )
+      }
 
       // The sun keeps rising as you scroll away from the hero.
-      gsap.to('.hero-sun', {
-        yPercent: -55,
-        ease: 'none',
-        scrollTrigger: { trigger: root.current, start: 'top top', end: 'bottom top', scrub: true },
-      })
-      gsap.to('.hero-arch-inner', {
-        yPercent: 10,
-        ease: 'none',
-        scrollTrigger: { trigger: root.current, start: 'top top', end: 'bottom top', scrub: true },
-      })
+      const scrub = () => ({ trigger: root.current, start: 'top top', end: 'bottom top', scrub: true })
+      gsap.to('.hero-glow', { yPercent: -45, ease: 'none', scrollTrigger: scrub() })
+      gsap.to('.hero-arch-inner', { yPercent: 10, ease: 'none', scrollTrigger: scrub() })
+      if (!heroVideo) gsap.to('.hero-sun', { yPercent: -55, ease: 'none', scrollTrigger: scrub() })
     },
     [ready, t],
   )
@@ -66,12 +74,13 @@ export function Hero({ ready }) {
       </div>
 
       <div className="hero-visual">
+        <div className="hero-glow" aria-hidden="true" />
         <div className="hero-arch">
           <div className="hero-arch-inner">
-            {site.media.heroVideo ? (
-              <video className="hero-video" src={site.media.heroVideo} poster={site.media.heroPoster || undefined} autoPlay={!reducedMotion} muted loop playsInline />
+            {heroVideo ? (
+              <AutoVideo className="hero-media hero-video" src={heroVideo} poster={heroPoster} eager />
             ) : (
-              <>
+              <div className="hero-media">
                 <div className="hero-sky" />
                 <div className="hero-sun" />
                 <svg className="hero-cup" viewBox="0 0 320 220" aria-hidden="true">
@@ -83,9 +92,9 @@ export function Hero({ ready }) {
                   <ellipse cx="160" cy="68" rx="40" ry="7" fill="#E8CDA8" />
                   <path d="M92 120h136" stroke="#C06E4D" strokeWidth="3" opacity=".6" />
                 </svg>
-              </>
+                {!reducedMotion && <Steam originX={0.5} originY={0.62} />}
+              </div>
             )}
-            {!reducedMotion && <Steam originX={0.5} originY={0.62} />}
           </div>
         </div>
       </div>

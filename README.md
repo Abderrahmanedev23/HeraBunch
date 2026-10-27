@@ -5,11 +5,11 @@ Website for **Hera Brunch**, Rabat’s home of breakfast.
 **Concept: "Golden Hour".** Scrolling the site is like living one morning at Hera. It opens at dawn and ends in late-morning sun, and every animation follows that idea:
 
 1. **Loader:** a clock runs from 06:00 to 08:00 while a glass of mint tea fills.
-2. **Hero:** "Good mornings start here." A sun rises behind a steaming coffee inside a Moroccan arch, and the steam drifts away from the cursor.
+2. **Hero:** "Good mornings start here." A latte-art pour plays inside a Moroccan arch while a warm sun rises behind it.
 3. **Intro:** the homepage text fills in word by word as you scroll.
 4. **Two traditions, one table:** a pinned scene. Moroccan plates slide in from one side and brunch plates from the other, and they meet on one table.
 5. **Menu:** filter pills with item counts, a large typographic list, and a dish preview that follows the cursor.
-6. **Every morning:** three scroll-driven scenes. Pancakes stack up, a juice glass fills, and mint tea is poured from height.
+6. **Every morning:** three clips that open up as you scroll: honey over pancakes, fresh orange juice, and tea poured from height.
 7. **Marquee:** a looping text band that reacts to scroll speed.
 8. **Visit:** live Rabat time, open/closed status, hours, directions and a spinning "Book a table" badge.
 9. **Footer:** the sun sets behind a giant wordmark.
@@ -38,7 +38,7 @@ It deploys to any static host (Vercel, Netlify, Cloudflare Pages). The build com
 
 | What | File |
 |---|---|
-| Hours, address, phone, links, hero video | `src/data/site.js` |
+| Hours, address, phone, links, videos | `src/data/site.js` |
 | Menu items and prices | `src/data/menu.js` |
 | All text, in EN / FR / AR | `src/i18n.jsx` |
 | Colours and fonts | top of `src/styles.css` |
@@ -51,9 +51,15 @@ It deploys to any static host (Vercel, Netlify, Cloudflare Pages). The build com
 - [ ] Add prices to `src/data/menu.js`. Rows show the price as soon as one is set.
 - [ ] Add Glovo or booking links if Hera has them.
 - [ ] Replace the text wordmark with the real logo (SVG) in `src/components/Bits.jsx`.
-- [ ] Replace the illustrated dishes with real photos of Hera’s plates, and add a hero video (`site.media.heroVideo`).
+- [ ] Replace the stock clips and illustrated dishes with photos and videos of Hera’s own plates (`site.media` in `src/data/site.js`).
 - [ ] Have a native speaker review the French and Arabic text.
-- [ ] If stock photos are used, keep their licence and credits in `public/media/CREDITS.md`.
+- [ ] Keep `CREDITS.md` up to date for any stock photo or video, and use only items whose licence allows commercial use.
+
+## Media
+
+Videos and images live in `public/media/` and are wired up in `site.media` (`src/data/site.js`). Any slot set to `null` falls back to the built-in illustration. Clips play muted, only while on screen, and stay on their poster frame for visitors who prefer reduced motion. Sources and licences are listed in `CREDITS.md`.
+
+To add a clip, export it small: a square or 4:5 crop, no audio, H.264 MP4 at around 720–1080 px.
 
 ## Brand
 

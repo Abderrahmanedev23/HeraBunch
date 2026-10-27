@@ -472,9 +472,22 @@ button:hover .roll-line span {
   height: min(78svh, 720px);
 }
 
+.hero-glow {
+  position: absolute;
+  left: 50%;
+  top: -18%;
+  width: 135%;
+  aspect-ratio: 1;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(247, 195, 91, 0.6) 0%, rgba(236, 158, 87, 0.28) 38%, rgba(236, 158, 87, 0) 68%);
+  pointer-events: none;
+}
+
 .hero-arch {
   position: absolute;
   inset: 0;
+  z-index: 1;
   border-radius: 999px 999px 0 0;
   overflow: hidden;
   background: #f3c9b0;
@@ -512,7 +525,13 @@ button:hover .roll-line span {
   filter: drop-shadow(0 30px 40px rgba(120, 60, 30, 0.25));
 }
 
-.hero-video {
+.hero-media {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-video,
+.moment-video {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -877,6 +896,7 @@ button:hover .roll-line span {
 }
 
 .moment-art {
+  position: relative;
   aspect-ratio: 1;
   border-radius: 999px 999px 24px 24px;
   background: linear-gradient(180deg, #fbeedc, var(--dawn));

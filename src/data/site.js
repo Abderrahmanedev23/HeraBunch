@@ -17,10 +17,16 @@ export const site = {
   // TODO: add Glovo / booking links if Hera has them.
   glovo: null,
 
-  // Drop real files into /public/media and set the paths here.
-  // When null, the site shows its illustrated version instead.
+  // Files live in /public/media. Sources and licences: CREDITS.md.
+  // Set a slot to null to show the illustrated version instead.
   media: {
-    heroVideo: null, // e.g. '/media/hero.mp4' (slow-motion coffee pour or honey drip)
-    heroPoster: null,
+    heroVideo: '/media/hero-latte.mp4',
+    heroPoster: '/media/hero-latte.jpg',
+    // "Every morning" cards, in order: cooked to order, squeezed every morning, poured from height.
+    moments: [
+      { video: '/media/moment-pancakes.mp4', poster: '/media/moment-pancakes.jpg' },
+      { video: '/media/moment-juice.mp4', poster: '/media/moment-juice.jpg' },
+      { video: '/media/moment-tea.mp4', poster: '/media/moment-tea.jpg' },
+    ],
   },
 }

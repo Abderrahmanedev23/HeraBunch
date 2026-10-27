@@ -1,9 +1,12 @@
 import { useRef } from 'react'
 import { useLang } from '../i18n'
 import { gsap, useGsap } from '../lib/motion'
+import { site } from '../data/site'
 import { Label } from './Bits'
+import { AutoVideo } from './AutoVideo'
 
-// Three small scenes, each played by scrolling: pancakes stack up,
+// Three morning scenes. Each card shows its clip from site.media.moments,
+// or falls back to an illustration played by scrolling: pancakes stack up,
 // a glass of juice fills, mint tea is poured from height.
 
 function Pancakes() {
@@ -73,6 +76,25 @@ function Tea() {
   )
 }
 
+const sceneTimelines = [
+  (tl, el) => {
+    tl.from(el.querySelectorAll('.mp-cake'), { y: -220, opacity: 0, stagger: 0.25, ease: 'bounce.out', duration: 0.6 })
+      .from(el.querySelector('.mp-butter'), { y: -120, opacity: 0, duration: 0.4 })
+      .fromTo(el.querySelector('.mp-honey'), { strokeDasharray: 400, strokeDashoffset: 400 }, { strokeDashoffset: 0, duration: 0.8 })
+  },
+  (tl, el) => {
+    tl.from(el.querySelector('.mj-orange'), { y: -60, opacity: 0, duration: 0.4 })
+      .to(el.querySelector('.mj-orange'), { scaleY: 0.7, transformOrigin: '50% 100%', yoyo: true, repeat: 3, duration: 0.15 })
+      .fromTo(el.querySelectorAll('.mj-drop'), { y: 0, opacity: 1 }, { y: 120, opacity: 0, stagger: 0.1, duration: 0.5 }, '<')
+      .fromTo(el.querySelector('.mj-fill'), { scaleY: 0, transformOrigin: '50% 100%' }, { scaleY: 1, duration: 1 }, '<')
+  },
+  (tl, el) => {
+    tl.from(el.querySelector('.mt-pot'), { x: 60, opacity: 0, duration: 0.4 })
+      .fromTo(el.querySelector('.mt-stream'), { strokeDasharray: 200, strokeDashoffset: 200 }, { strokeDashoffset: 0, duration: 0.4 })
+      .fromTo(el.querySelector('.mt-fill'), { scaleY: 0, transformOrigin: '50% 100%' }, { scaleY: 1, duration: 1 })
+  },
+]
+
 export function Moments() {
   const root = useRef()
   const { t } = useLang()
@@ -80,37 +102,28 @@ export function Moments() {
   useGsap(
     root,
     () => {
-      const scene = (selector, build) => {
-        const el = root.current.querySelector(selector)
+      root.current.querySelectorAll('.moment').forEach((el, i) => {
         const tl = gsap.timeline({
           scrollTrigger: { trigger: el, start: 'top 85%', end: 'bottom 45%', scrub: 0.6 },
         })
-        build(tl, el)
-      }
-
-      scene('.moment-1', (tl, el) => {
-        tl.from(el.querySelectorAll('.mp-cake'), { y: -220, opacity: 0, stagger: 0.25, ease: 'bounce.out', duration: 0.6 })
-          .from(el.querySelector('.mp-butter'), { y: -120, opacity: 0, duration: 0.4 })
-          .fromTo(el.querySelector('.mp-honey'), { strokeDasharray: 400, strokeDashoffset: 400 }, { strokeDashoffset: 0, duration: 0.8 })
-      })
-
-      scene('.moment-2', (tl, el) => {
-        tl.from(el.querySelector('.mj-orange'), { y: -60, opacity: 0, duration: 0.4 })
-          .to(el.querySelector('.mj-orange'), { scaleY: 0.7, transformOrigin: '50% 100%', yoyo: true, repeat: 3, duration: 0.15 })
-          .fromTo(el.querySelectorAll('.mj-drop'), { y: 0, opacity: 1 }, { y: 120, opacity: 0, stagger: 0.1, duration: 0.5 }, '<')
-          .fromTo(el.querySelector('.mj-fill'), { scaleY: 0, transformOrigin: '50% 100%' }, { scaleY: 1, duration: 1 }, '<')
-      })
-
-      scene('.moment-3', (tl, el) => {
-        tl.from(el.querySelector('.mt-pot'), { x: 60, opacity: 0, duration: 0.4 })
-          .fromTo(el.querySelector('.mt-stream'), { strokeDasharray: 200, strokeDashoffset: 200 }, { strokeDashoffset: 0, duration: 0.4 })
-          .fromTo(el.querySelector('.mt-fill'), { scaleY: 0, transformOrigin: '50% 100%' }, { scaleY: 1, duration: 1 })
+        const video = el.querySelector('video')
+        if (video) {
+          // The arch opens up around the clip while it settles from a zoom.
+          tl.fromTo(
+            el.querySelector('.moment-art'),
+            { clipPath: 'inset(24% 14% 0% 14% round 999px 999px 24px 24px)' },
+            { clipPath: 'inset(0% 0% 0% 0% round 999px 999px 24px 24px)', ease: 'none' },
+          ).fromTo(video, { scale: 1.35 }, { scale: 1, ease: 'none' }, 0)
+        } else {
+          sceneTimelines[i](tl, el)
+        }
       })
     },
     [t],
   )
 
   const scenes = [Pancakes, Juice, Tea]
+  const media = site.media.moments || []
 
   return (
     <section className="moments" ref={root}>
@@ -121,7 +134,7 @@ export function Moments() {
           return (
             <article key={i} className={`moment moment-${i + 1}`}>
               <div className="moment-art">
-                <Scene />
+                {media[i]?.video ? <AutoVideo className="moment-video" src={media[i].video} poster={media[i].poster} /> : <Scene />}
               </div>
               <span className="moment-num">0{i + 1}</span>
               <h3>{title}</h3>
