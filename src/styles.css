@@ -1582,21 +1582,24 @@ html.header-hidden .tabs-bar {
 
 /* ---------- Morning window ---------- */
 
+/* Slides up over the hero like a card (rounded top and a soft shadow, flattened on arrival). */
 .win {
+  --w: min(34vw, 40vh, 380px);
+  --f: 14px;
   position: relative;
+  z-index: 2;
   height: 100svh;
   min-height: 560px;
   display: grid;
   place-items: center;
   overflow: hidden;
+  box-shadow: 0 -12px 32px -20px rgba(29, 32, 66, 0.5);
   background:
     radial-gradient(ellipse 60% 55% at 50% 42%, #f5e4cf 0%, rgba(245, 228, 207, 0) 70%),
     linear-gradient(180deg, #ebd3b7 0%, #dfc09d 100%);
 }
 
 .win-stage {
-  --w: min(34vw, 40vh, 380px);
-  --f: 14px;
   position: relative;
   z-index: 1;
   width: calc(var(--w) + var(--f) * 2);
@@ -1804,22 +1807,52 @@ html.header-hidden .tabs-bar {
   z-index: 3;
 }
 
+/* Blue hour before sunrise: the room is dark until the shutters open and the warm light comes in. */
+.win-night {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 46% 42% at 50% 42%, #5c68a8 0%, rgba(92, 104, 168, 0) 72%),
+    linear-gradient(180deg, #3d4785 0%, #2e3568 100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* The pink of sunrise, between the blue hour and full daylight. */
+.win-blush {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 46% 42% at 50% 42%, #ffd6ad 0%, rgba(255, 214, 173, 0) 72%),
+    linear-gradient(180deg, #cf8a8e 0%, #e7a98a 100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Dims everything, the window included, at the same time. */
 .win-dark {
   position: absolute;
   inset: 0;
   z-index: 4;
-  background: #3a2116;
+  background: #2d2a52;
   mix-blend-mode: multiply;
   opacity: 0;
   pointer-events: none;
 }
 
-.win-fade {
+/* Sunrise light slipping through the gap between the closed shutters. */
+.win-leak {
   position: absolute;
-  inset: 0 0 auto;
   z-index: 5;
-  height: 28vh;
-  background: linear-gradient(var(--cream), rgba(254, 251, 232, 0));
+  left: 50%;
+  top: calc(50% - 4vh - var(--w) * 0.725);
+  width: 4px;
+  height: calc(var(--w) * 1.45);
+  margin-left: -2px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, rgba(255, 222, 160, 0) 2%, #ffe3a8 22%, #fff4d6 60%, #ffd48f 100%);
+  box-shadow: 0 0 12px 2px rgba(255, 200, 120, 0.7), 0 0 46px 10px rgba(255, 178, 102, 0.3);
+  opacity: 0;
   pointer-events: none;
 }
 
@@ -2012,7 +2045,7 @@ html.header-hidden .tabs-bar {
 }
 
 @media (max-width: 700px) {
-  .win-stage {
+  .win {
     --w: min(62vw, 38vh);
     --f: 10px;
   }

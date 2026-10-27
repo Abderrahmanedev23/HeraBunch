@@ -36,6 +36,17 @@ export function Hero({ ready }) {
       const scrub = () => ({ trigger: root.current, start: 'top top', end: 'bottom top', scrub: true })
       gsap.to('.hero-glow', { yPercent: -45, ease: 'none', scrollTrigger: scrub() })
       gsap.to('.hero-inner', { yPercent: 10, ease: 'none', scrollTrigger: scrub() })
+      // The hero settles back while the morning-window scene slides up over it.
+      const win = document.querySelector('.win')
+      if (win) {
+        gsap.to('.hero-copy, .hero-visual', {
+          scale: 0.94,
+          opacity: 0.45,
+          yPercent: 14,
+          ease: 'none',
+          scrollTrigger: { trigger: win, start: 'top bottom', end: 'top top', scrub: true },
+        })
+      }
       if (!heroVideo) gsap.to('.hero-sun', { yPercent: -55, ease: 'none', scrollTrigger: scrub() })
     },
     [ready, t],

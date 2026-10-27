@@ -98,14 +98,30 @@ export function MorningWindow() {
   useGsap(
     root,
     () => {
+      // The room slides up over the hero like a card; its rounded top flattens as it arrives.
+      const radius = () => Math.min(44, window.innerWidth * 0.08)
+      gsap.fromTo(
+        root.current,
+        { borderTopLeftRadius: radius, borderTopRightRadius: radius },
+        {
+          borderTopLeftRadius: 0,
+          borderTopRightRadius: 0,
+          ease: 'none',
+          scrollTrigger: { trigger: root.current, start: 'top bottom', end: 'top top', scrub: true, invalidateOnRefresh: true },
+        },
+      )
       const tl = gsap.timeline({
         defaults: { ease: 'none' },
         scrollTrigger: { trigger: root.current, start: 'top top', end: '+=160%', scrub: 0.6, pin: true },
       })
-      tl.to('.win-fade', { opacity: 0, duration: 0.3 }, 0)
-        .fromTo('.win-shutter-l', { rotateY: 0 }, { rotateY: -112, duration: 1.2, ease: 'power2.inOut' }, 0.3)
+      tl.fromTo('.win-shutter-l', { rotateY: 0 }, { rotateY: -112, duration: 1.2, ease: 'power2.inOut' }, 0.3)
         .fromTo('.win-shutter-r', { rotateY: 0 }, { rotateY: 112, duration: 1.2, ease: 'power2.inOut' }, 0.3)
-        .fromTo('.win-dark', { opacity: 0.62 }, { opacity: 0, duration: 1.3 }, 0.4)
+        .fromTo('.win-leak', { opacity: 1, scaleX: 1 }, { opacity: 0, scaleX: 5, duration: 0.5 }, 0.3)
+        // The room goes from blue to pink to golden, like the sky outside.
+        .fromTo('.win-blush', { opacity: 0 }, { opacity: 1, duration: 0.5 }, 0.35)
+        .fromTo('.win-night', { opacity: 1 }, { opacity: 0, duration: 0.9 }, 0.4)
+        .fromTo('.win-dark', { opacity: 0.5 }, { opacity: 0, duration: 1.1 }, 0.4)
+        .to('.win-blush', { opacity: 0, duration: 0.8 }, 1)
         .fromTo('.win-sun', { y: 110 }, { y: 0, duration: 1.8 }, 0.2)
         .fromTo('.win-day', { opacity: 0 }, { opacity: 1, duration: 1.6 }, 0.7)
         .fromTo('.win-clouds', { x: -20 }, { x: 30, duration: 3 }, 0)
@@ -123,6 +139,8 @@ export function MorningWindow() {
 
   return (
     <section className="win" ref={root} aria-label={t.window.b}>
+      <div className="win-blush" aria-hidden="true" />
+      <div className="win-night" aria-hidden="true" />
       <div className="win-stage">
         <div className="win-frame" />
         <div className="win-opening">
@@ -166,7 +184,7 @@ export function MorningWindow() {
       </div>
       {!reducedMotion && <Dust className="win-dust" />}
       <div className="win-dark" aria-hidden="true" />
-      <div className="win-fade" aria-hidden="true" />
+      <div className="win-leak" aria-hidden="true" />
       <div className="win-caption">
         <p className="win-line win-line-a">{t.window.a}</p>
         <p className="win-line win-line-b">{t.window.b}</p>
