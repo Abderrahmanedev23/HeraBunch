@@ -877,6 +877,22 @@ button:hover .roll-line span {
   transform: translate(12px, 14px);
 }
 
+/* The msemen frame's top corner is folded over, showing the back of the bread. */
+.dish-fold {
+  position: absolute;
+  left: 66%;
+  top: 6%;
+  width: 28%;
+  height: 28%;
+  clip-path: polygon(0 0, 100% 100%, 0 100%);
+  background: linear-gradient(45deg, #d9b07a 0%, #f3dcb6 55%, #fbeed6 100%);
+  transition: transform 0.6s var(--ease);
+}
+
+.dish:hover .dish-fold {
+  transform: translate(-4px, -4px);
+}
+
 .dish-zoom {
   position: absolute;
   inset: 0;
@@ -1665,49 +1681,6 @@ button:hover .roll-line span {
   pointer-events: none;
 }
 
-/* ---------- Shapes ---------- */
-
-/* Clip paths live in components/ShapeDefs.jsx. */
-.shape-sun {
-  -webkit-clip-path: url(#shape-sun);
-  clip-path: url(#shape-sun);
-}
-
-.shape-flower {
-  -webkit-clip-path: url(#shape-flower);
-  clip-path: url(#shape-flower);
-}
-
-.shape-quatrefoil {
-  -webkit-clip-path: url(#shape-quatrefoil);
-  clip-path: url(#shape-quatrefoil);
-}
-
-.shape-stamp {
-  -webkit-clip-path: url(#shape-stamp);
-  clip-path: url(#shape-stamp);
-}
-
-.shape-blob {
-  -webkit-clip-path: url(#shape-blob);
-  clip-path: url(#shape-blob);
-}
-
-.shape-sun-spin {
-  -webkit-clip-path: url(#shape-sun-spin);
-  clip-path: url(#shape-sun-spin);
-}
-
-.shape-flower-spin {
-  -webkit-clip-path: url(#shape-flower-spin);
-  clip-path: url(#shape-flower-spin);
-}
-
-.shape-blob-morph {
-  -webkit-clip-path: url(#shape-blob-morph);
-  clip-path: url(#shape-blob-morph);
-}
-
 /* ---------- Tile band ---------- */
 
 .tileband {
@@ -1922,6 +1895,7 @@ button:hover .roll-line span {
   .dish-zoom,
   .dish-photo,
   .dish-shadow,
+  .dish-fold,
   .moment-art,
   .moment-shadow,
   .btn {

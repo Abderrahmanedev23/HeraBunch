@@ -4,6 +4,7 @@ import { gsap, useGsap } from '../lib/motion'
 import { site } from '../data/site'
 import { Label } from './Bits'
 import { AutoVideo } from './AutoVideo'
+import { shapeStyle } from '../lib/shapes'
 
 // Three morning scenes. Each card shows its clip from site.media.moments,
 // or falls back to an illustration played by scrolling: pancakes stack up,
@@ -131,9 +132,9 @@ export function Moments() {
   const scenes = [Pancakes, Juice, Tea]
   const media = site.media.moments || []
   const frames = [
-    { shape: 'flower-spin', tint: 'var(--honey)' },
-    { shape: 'quatrefoil', tint: 'var(--terracotta)' },
-    { shape: 'blob-morph', tint: 'var(--mint)' },
+    { shape: 'drop', tint: 'var(--honey)' },
+    { shape: 'slice-spin', tint: 'var(--terracotta)' },
+    { shape: 'egg-morph', tint: 'var(--mint)' },
   ]
 
   return (
@@ -146,8 +147,8 @@ export function Moments() {
           return (
             <article key={i} className={`moment moment-${i + 1}`}>
               <div className="moment-frame" style={{ '--tint': frames[i].tint }}>
-                <span className={`moment-shadow shape-${frames[i].shape}`} aria-hidden="true" />
-                <div className={`moment-art shape-${frames[i].shape}`}>
+                <span className="moment-shadow" style={shapeStyle(frames[i].shape)} aria-hidden="true" />
+                <div className="moment-art" style={shapeStyle(frames[i].shape)}>
                   {media[i]?.video ? <AutoVideo className="moment-video" src={media[i].video} poster={media[i].poster} /> : <Scene />}
                 </div>
               </div>

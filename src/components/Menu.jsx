@@ -3,13 +3,13 @@ import { Flip } from 'gsap/Flip'
 import { useLang } from '../i18n'
 import { categories, menu } from '../data/menu'
 import { gsap, reducedMotion, ScrollTrigger, useGsap } from '../lib/motion'
+import { shapeStyle } from '../lib/shapes'
 import { Dish } from './Dish'
 import { Label } from './Bits'
 
 gsap.registerPlugin(Flip)
 
-// Each card gets one of these frames and offset colours, in turn.
-const SHAPES = ['sun', 'flower', 'quatrefoil', 'stamp', 'blob']
+// Offset colours behind the photos, in turn.
 const TINTS = ['var(--terracotta)', 'var(--honey)', 'var(--mint)', '#e9b48a']
 
 // Shows a card in its final state straight away (used before filtering).
@@ -136,8 +136,8 @@ export function Menu() {
           return (
             <article key={m.id} className={`dish ${visible ? '' : 'is-out'} ${low ? 'is-low' : ''}`}>
               <div className="dish-frame" style={{ '--tint': TINTS[i % TINTS.length] }}>
-                <span className={`dish-shadow shape-${SHAPES[i % SHAPES.length]}`} aria-hidden="true" />
-                <div className={`dish-photo shape-${SHAPES[i % SHAPES.length]}`}>
+                <span className="dish-shadow" style={shapeStyle(m.shape)} aria-hidden="true" />
+                <div className="dish-photo" style={shapeStyle(m.shape)}>
                   <div className="dish-zoom">
                     {m.photo ? (
                       <img className="dish-img" src={m.photo} alt={name} loading="lazy" width="720" height="900" />
@@ -148,6 +148,7 @@ export function Menu() {
                     )}
                   </div>
                 </div>
+                {m.shape === 'msemen' && <span className="dish-fold" aria-hidden="true" />}
                 <span className="dish-tag">{t.menu.cats[m.category]}</span>
               </div>
               <div className="dish-body">

@@ -10,8 +10,8 @@ Website for **Hera Brunch**, Rabat’s home of breakfast.
 4. **Intro:** the homepage text fills in word by word as you scroll.
 5. **Two traditions, one table:** a pinned scene. Moroccan plates slide in from one side and brunch plates from the other, and they meet on one table.
 6. **Tile band:** a strip of zellige stars that slides sideways as you scroll.
-7. **Menu:** photo cards in a set of retro shapes (sun, flower, Moroccan quatrefoil, wavy stamp, pebble), each with a coloured offset behind it like a print. Each shape blooms open as it scrolls in, and filtering glides the cards to their new places.
-8. **Every morning:** a striped café awning unrolls over the section, and three clips bloom open in their own shapes: honey over pancakes, fresh orange juice, and tea poured from height.
+7. **Menu:** every dish sits in a frame that tells its story (see *Frame shapes* below), with a coloured offset behind it like a print. Each shape blooms open as it scrolls in, and filtering glides the cards to their new places.
+8. **Every morning:** a striped café awning unrolls over the section, and three clips bloom open in their own shapes: honey over pancakes in a honey drop, fresh juice in a turning orange slice, and tea poured from height in a slowly changing fried-egg shape.
 9. **Marquee:** a looping text band that reacts to scroll speed.
 10. **Visit:** live Rabat time, open/closed status, hours, directions and a spinning "Book a table" badge.
 11. **Footer:** the sun sets behind a giant wordmark.
@@ -69,7 +69,24 @@ To add a clip, export it small: a square or 4:5 crop, no audio, H.264 MP4 at aro
 
 The "Hera" logo is used as an SVG that takes its colour from CSS (`src/components/Logo.jsx`, data in `src/data/logo.json`). Ready-made files are in `public/brand/`: `hera-wordmark.svg` and `hera-mark.svg` (the H on a scalloped badge, also used as the favicon).
 
-Photo frames use a family of retro shapes defined as SVG clip paths in `src/lib/shapes.js` and applied with the `.shape-*` classes.
+### Frame shapes
+
+Every photo frame means something: half come from the Moroccan table and its crafts, half from the brunch table. They are SVG clip paths in `src/lib/shapes.js`, chosen per dish in `src/data/menu.js`.
+
+| Shape | Where it comes from | Used for |
+|---|---|---|
+| Zellige star | the eight-pointed star (khatam) of Moroccan tilework | Amlou & olive oil |
+| Rosette | the flower in zellige, a garden in tiles | Avocado toast |
+| Lattice | the quatrefoil of riad windows and screens | Fresh cheese |
+| Tea glass | the Moroccan mint tea glass | Mint tea |
+| Msemen | a folded square, with its corner turned over | Msemen |
+| Baghrir | a round pancake full of little holes | Baghrir |
+| Sun | the morning sun, and an egg sunny side up | Hero video, Eggs your way |
+| Fried egg | the soft outline of a fried egg | Eggs Benedict, French toast, the tea clip |
+| Honey drop | honey, amlou and syrup | Pancakes |
+| Orange slice | fresh juice, segments and all | Fresh juices |
+| Coffee bean | a bean with its S-shaped crease | Slow-brewed coffee |
+| Crescent | a croissant, and the crescent moon over Rabat at dawn | Croissants |
 
 | Role | Colour |
 |---|---|

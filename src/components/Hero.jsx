@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { useLang } from '../i18n'
 import { gsap, reducedMotion, scrollTo, useGsap, words } from '../lib/motion'
 import { site } from '../data/site'
-import { shapes } from '../lib/shapes'
+import { shapes, shapeStyle } from '../lib/shapes'
 import { Roll } from './Bits'
 import { AutoVideo } from './AutoVideo'
 import { Steam } from './Steam'
@@ -75,9 +75,9 @@ export function Hero({ ready }) {
         <div className="hero-glow" aria-hidden="true" />
         <div className="hero-badge">
           <svg className="hero-ring" viewBox="0 0 1 1" aria-hidden="true">
-            <path d={shapes.sun} pathLength="300" />
+            <path d={shapes.sun.d} pathLength="300" />
           </svg>
-          <div className="hero-frame shape-sun-spin">
+          <div className="hero-frame" style={shapeStyle('sun-spin')}>
             <div className="hero-inner">
               {heroVideo ? (
                 <AutoVideo className="hero-media hero-video" src={heroVideo} poster={heroPoster} eager />
