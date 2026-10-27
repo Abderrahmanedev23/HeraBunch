@@ -102,15 +102,11 @@ export function Moments() {
   useGsap(
     root,
     () => {
-      // The section rises in as an arch that flattens out.
+      // A café awning unrolls along the top of the section.
       gsap.fromTo(
-        root.current,
-        { clipPath: 'inset(0% 0% 0% 0% round 50vw 50vw 0px 0px)' },
-        {
-          clipPath: 'inset(0% 0% 0% 0% round 0vw 0vw 0px 0px)',
-          ease: 'none',
-          scrollTrigger: { trigger: root.current, start: 'top bottom', end: 'top 15%', scrub: true },
-        },
+        '.awning',
+        { scaleY: 0 },
+        { scaleY: 1, ease: 'none', scrollTrigger: { trigger: root.current, start: 'top bottom', end: 'top 55%', scrub: true } },
       )
       root.current.querySelectorAll('.moment').forEach((el, i) => {
         const tl = gsap.timeline({
@@ -118,11 +114,11 @@ export function Moments() {
         })
         const video = el.querySelector('video')
         if (video) {
-          // The arch opens up around the clip while it settles from a zoom.
+          // The shape blooms open while turning into place, and the clip settles from a zoom.
           tl.fromTo(
-            el.querySelector('.moment-art'),
-            { clipPath: 'inset(24% 14% 0% 14% round 999px 999px 24px 24px)' },
-            { clipPath: 'inset(0% 0% 0% 0% round 999px 999px 24px 24px)', ease: 'none' },
+            el.querySelector('.moment-frame'),
+            { scale: 0.6, rotate: -24, opacity: 0 },
+            { scale: 1, rotate: 0, opacity: 1, ease: 'none' },
           ).fromTo(video, { scale: 1.35 }, { scale: 1, ease: 'none' }, 0)
         } else {
           sceneTimelines[i](tl, el)
@@ -134,17 +130,26 @@ export function Moments() {
 
   const scenes = [Pancakes, Juice, Tea]
   const media = site.media.moments || []
+  const frames = [
+    { shape: 'flower-spin', tint: 'var(--honey)' },
+    { shape: 'quatrefoil', tint: 'var(--terracotta)' },
+    { shape: 'blob-morph', tint: 'var(--mint)' },
+  ]
 
   return (
     <section className="moments" ref={root}>
+      <div className="awning" aria-hidden="true" />
       <Label>{t.moments.label}</Label>
       <div className="moments-grid">
         {t.moments.items.map(([title, text], i) => {
           const Scene = scenes[i]
           return (
             <article key={i} className={`moment moment-${i + 1}`}>
-              <div className="moment-art">
-                {media[i]?.video ? <AutoVideo className="moment-video" src={media[i].video} poster={media[i].poster} /> : <Scene />}
+              <div className="moment-frame" style={{ '--tint': frames[i].tint }}>
+                <span className={`moment-shadow shape-${frames[i].shape}`} aria-hidden="true" />
+                <div className={`moment-art shape-${frames[i].shape}`}>
+                  {media[i]?.video ? <AutoVideo className="moment-video" src={media[i].video} poster={media[i].poster} /> : <Scene />}
+                </div>
               </div>
               <span className="moment-num">0{i + 1}</span>
               <h3>{title}</h3>

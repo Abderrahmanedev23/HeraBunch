@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { useLang } from '../i18n'
 import { gsap, useGsap } from '../lib/motion'
 import { site } from '../data/site'
+import { Logo } from './Logo'
 
 // The morning ends: the sun sets behind a giant wordmark.
 export function Footer() {
@@ -11,12 +12,16 @@ export function Footer() {
   useGsap(
     root,
     () => {
-      gsap.from('.footer-mark span', {
-        yPercent: 100,
-        stagger: 0.08,
-        ease: 'power3.out',
-        scrollTrigger: { trigger: root.current, start: 'top 80%', end: 'bottom bottom', scrub: 0.6 },
-      })
+      gsap.fromTo(
+        '.footer-logo',
+        { clipPath: 'inset(0% 100% 0% 0%)', yPercent: 25 },
+        {
+          clipPath: 'inset(0% 0% 0% 0%)',
+          yPercent: 0,
+          ease: 'power2.out',
+          scrollTrigger: { trigger: root.current, start: 'top 80%', end: 'bottom bottom', scrub: 0.6 },
+        },
+      )
       gsap.fromTo(
         '.footer-sun',
         { yPercent: -40 },
@@ -36,13 +41,9 @@ export function Footer() {
       </div>
       <div className="footer-stage">
         <div className="footer-sun" />
-        <p className="footer-mark" aria-label="Hera">
-          {[...'Hera'].map((c, i) => (
-            <span key={i} aria-hidden="true">
-              {c}
-            </span>
-          ))}
-        </p>
+        <div className="footer-mark">
+          <Logo className="footer-logo" title="Hera" />
+        </div>
       </div>
       <div className="footer-bottom">
         <span>{t.footer.tagline}</span>

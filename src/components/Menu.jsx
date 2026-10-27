@@ -8,14 +8,15 @@ import { Label } from './Bits'
 
 gsap.registerPlugin(Flip)
 
-const ARCH_CLOSED = 'inset(100% 0% 0% 0% round 999px 999px 18px 18px)'
-const ARCH_OPEN = 'inset(0% 0% 0% 0% round 999px 999px 18px 18px)'
+// Each card gets one of these frames and offset colours, in turn.
+const SHAPES = ['sun', 'flower', 'quatrefoil', 'stamp', 'blob']
+const TINTS = ['var(--terracotta)', 'var(--honey)', 'var(--mint)', '#e9b48a']
 
 // Shows a card in its final state straight away (used before filtering).
 function settle(card) {
   if (card.dataset.shown) return
   card.dataset.shown = '1'
-  gsap.set(card.querySelector('.dish-photo'), { clipPath: ARCH_OPEN })
+  gsap.set(card.querySelector('.dish-frame'), { scale: 1, rotate: 0, opacity: 1 })
   gsap.set(card.querySelector('.dish-img'), { scale: 1 })
   gsap.set(card.querySelector('.dish-body'), { y: 0, opacity: 1 })
 }
@@ -37,10 +38,10 @@ export function Menu() {
         scrollTrigger: { trigger: '.menu-title', start: 'top 85%' },
       })
 
-      // Each arch opens around its photo as the card scrolls into view.
+      // Each shape blooms open around its photo as the card scrolls into view.
       const cards = gsap.utils.toArray('.dish')
       cards.forEach((card) => delete card.dataset.shown)
-      gsap.set('.dish-photo', { clipPath: ARCH_CLOSED })
+      gsap.set('.dish-frame', { scale: 0.6, rotate: -18, opacity: 0 })
       gsap.set('.dish-img', { scale: 1.35 })
       gsap.set('.dish-body', { y: 24, opacity: 0 })
       ScrollTrigger.batch(cards, {
@@ -51,7 +52,7 @@ export function Menu() {
           if (!fresh.length) return
           fresh.forEach((card) => (card.dataset.shown = '1'))
           const pick = (sel) => fresh.map((card) => card.querySelector(sel))
-          gsap.to(pick('.dish-photo'), { clipPath: ARCH_OPEN, duration: 1.3, ease: 'expo.out', stagger: 0.09 })
+          gsap.to(pick('.dish-frame'), { scale: 1, rotate: 0, opacity: 1, duration: 1.2, ease: 'back.out(1.5)', stagger: 0.09 })
           gsap.to(pick('.dish-img'), { scale: 1, duration: 1.8, ease: 'expo.out', stagger: 0.09 })
           gsap.to(pick('.dish-body'), { y: 0, opacity: 1, duration: 1, ease: 'power3.out', stagger: 0.09, delay: 0.2 })
         },
@@ -134,15 +135,18 @@ export function Menu() {
           const low = visible && shown++ % 2 === 1
           return (
             <article key={m.id} className={`dish ${visible ? '' : 'is-out'} ${low ? 'is-low' : ''}`}>
-              <div className="dish-photo">
-                <div className="dish-zoom">
-                  {m.photo ? (
-                    <img className="dish-img" src={m.photo} alt={name} loading="lazy" width="720" height="900" />
-                  ) : (
-                    <div className="dish-img dish-illus">
-                      <Dish name={m.dish} title={name} />
-                    </div>
-                  )}
+              <div className="dish-frame" style={{ '--tint': TINTS[i % TINTS.length] }}>
+                <span className={`dish-shadow shape-${SHAPES[i % SHAPES.length]}`} aria-hidden="true" />
+                <div className={`dish-photo shape-${SHAPES[i % SHAPES.length]}`}>
+                  <div className="dish-zoom">
+                    {m.photo ? (
+                      <img className="dish-img" src={m.photo} alt={name} loading="lazy" width="720" height="900" />
+                    ) : (
+                      <div className="dish-img dish-illus">
+                        <Dish name={m.dish} title={name} />
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <span className="dish-tag">{t.menu.cats[m.category]}</span>
               </div>

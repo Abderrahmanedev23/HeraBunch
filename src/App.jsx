@@ -15,6 +15,7 @@ import { Visit } from './components/Visit'
 import { Footer } from './components/Footer'
 import { Cursor } from './components/Cursor'
 import { SunPath } from './components/SunPath'
+import { ShapeDefs } from './components/ShapeDefs'
 
 export default function App() {
   const [ready, setReady] = useState(false)
@@ -43,6 +44,7 @@ export default function App() {
 
   return (
     <>
+      <ShapeDefs />
       {!ready && <Loader onDone={() => setReady(true)} />}
       <Header />
       <main>

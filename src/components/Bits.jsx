@@ -1,12 +1,11 @@
 import { useLang } from '../i18n'
+import { Logo } from './Logo'
 
-// Text stand-in for the logo until Hera sends the vector file.
+// The Hera logo with "Brunch" set underneath.
 export function Wordmark({ className = '' }) {
   return (
-    <span className={`wordmark ${className}`} aria-label="Hera Brunch">
-      <span className="wm-hera" aria-hidden="true">
-        Hera
-      </span>
+    <span className={`wordmark ${className}`} role="img" aria-label="Hera Brunch">
+      <Logo className="wm-logo" />
       <span className="wm-sub" aria-hidden="true">
         Brunch
       </span>

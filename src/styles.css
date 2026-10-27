@@ -139,12 +139,10 @@ p {
   color: var(--terracotta);
 }
 
-.wm-hera {
-  font-family: 'Fraunces Variable', serif;
-  font-weight: 500;
-  font-size: 30px;
-  font-variation-settings: 'SOFT' 100, 'WONK' 1, 'opsz' 144;
-  letter-spacing: -0.01em;
+.wm-logo {
+  display: block;
+  width: auto;
+  height: 26px;
 }
 
 .wm-sub {
@@ -492,6 +490,8 @@ button:hover .roll-line span {
 .hero-visual {
   position: relative;
   height: min(78svh, 720px);
+  display: grid;
+  place-items: center;
 }
 
 .hero-glow {
@@ -506,19 +506,42 @@ button:hover .roll-line span {
   pointer-events: none;
 }
 
-.hero-arch {
-  position: absolute;
-  inset: 0;
+/* The hero clip sits in a slowly turning sun, ringed by a stitched outline turning the other way. */
+.hero-badge {
+  position: relative;
   z-index: 1;
-  border-radius: 999px 999px 0 0;
-  overflow: hidden;
-  background: #f3c9b0;
-  box-shadow: 0 0 0 10px var(--paper), 0 0 0 11px var(--line);
+  width: min(100%, 70svh, 640px);
+  aspect-ratio: 1;
 }
 
-.hero-arch-inner {
+.hero-frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #f3c9b0;
+}
+
+.hero-inner {
   position: absolute;
   inset: -6% 0 0;
+}
+
+.hero-ring {
+  position: absolute;
+  inset: -5%;
+  width: 110%;
+  height: 110%;
+  overflow: visible;
+  pointer-events: none;
+  animation: spin 160s linear infinite reverse;
+}
+
+.hero-ring path {
+  fill: none;
+  stroke: var(--terracotta);
+  stroke-width: 1.4;
+  stroke-dasharray: 1.2 2.2;
+  vector-effect: non-scaling-stroke;
 }
 
 .hero-sky {
@@ -825,13 +848,33 @@ button:hover .roll-line span {
   margin-top: 72px;
 }
 
-.dish-photo {
+.dish-frame {
   position: relative;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 1;
+}
+
+.dish-shadow {
+  position: absolute;
+  inset: 0;
+  background: var(--tint);
+  transform: translate(8px, 10px);
+  transition: transform 0.6s var(--ease);
+}
+
+.dish-photo {
+  position: absolute;
+  inset: 0;
   overflow: hidden;
-  border-radius: 999px 999px 18px 18px;
   background: #efe2cf;
-  isolation: isolate;
+  transition: transform 0.6s var(--ease);
+}
+
+.dish:hover .dish-photo {
+  transform: translate(-4px, -4px);
+}
+
+.dish:hover .dish-shadow {
+  transform: translate(12px, 14px);
 }
 
 .dish-zoom {
@@ -941,8 +984,21 @@ button:hover .roll-line span {
 /* ---------- Moments ---------- */
 
 .moments {
-  padding: clamp(80px, 10vw, 140px) var(--gutter);
+  position: relative;
+  padding: calc(clamp(80px, 10vw, 140px) + 40px) var(--gutter) clamp(80px, 10vw, 140px);
   background: #f8e6d4;
+}
+
+/* Striped café awning with a scalloped edge, unrolled on scroll. */
+.awning {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 62px;
+  transform-origin: 50% 0;
+  border-top: 6px solid var(--terracotta);
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='56'%3E%3Crect width='24' height='44' fill='%23C06E4D'/%3E%3Ccircle cx='12' cy='44' r='12' fill='%23C06E4D'/%3E%3Crect x='24' width='24' height='44' fill='%23FEFBE8'/%3E%3Ccircle cx='36' cy='44' r='12' fill='%23FEFBE8'/%3E%3C/svg%3E") repeat-x 0 0 / 48px 56px;
 }
 
 .moments-grid {
@@ -952,14 +1008,36 @@ button:hover .roll-line span {
   margin-top: 36px;
 }
 
-.moment-art {
+.moment-frame {
   position: relative;
   aspect-ratio: 1;
-  border-radius: 999px 999px 24px 24px;
-  background: linear-gradient(180deg, #fbeedc, var(--dawn));
+}
+
+/* A flat coloured copy of the shape, offset like a retro print. */
+.moment-shadow {
+  position: absolute;
+  inset: 0;
+  background: var(--tint);
+  transform: translate(10px, 12px);
+  transition: transform 0.6s var(--ease);
+}
+
+.moment-art {
+  position: relative;
+  height: 100%;
   display: grid;
   place-items: center;
   overflow: hidden;
+  background: linear-gradient(180deg, #fbeedc, var(--dawn));
+  transition: transform 0.6s var(--ease);
+}
+
+.moment:hover .moment-shadow {
+  transform: translate(14px, 17px);
+}
+
+.moment:hover .moment-art {
+  transform: translate(-3px, -3px);
 }
 
 .moment-svg {
@@ -1236,19 +1314,14 @@ button:hover .roll-line span {
   position: relative;
   display: flex;
   justify-content: center;
-  overflow: hidden;
-  font-family: 'Fraunces Variable', serif;
-  font-weight: 500;
-  font-size: clamp(120px, 30vw, 460px);
-  line-height: 0.85;
-  letter-spacing: -0.04em;
-  font-variation-settings: 'SOFT' 100, 'WONK' 1, 'opsz' 144;
-  padding-bottom: 0.04em;
-  direction: ltr;
+  padding: 2vw 0 3vw;
 }
 
-.footer-mark span {
-  display: inline-block;
+.footer-logo {
+  display: block;
+  width: min(72vw, 760px);
+  height: auto;
+  color: var(--cream);
 }
 
 .footer-bottom {
@@ -1592,6 +1665,49 @@ button:hover .roll-line span {
   pointer-events: none;
 }
 
+/* ---------- Shapes ---------- */
+
+/* Clip paths live in components/ShapeDefs.jsx. */
+.shape-sun {
+  -webkit-clip-path: url(#shape-sun);
+  clip-path: url(#shape-sun);
+}
+
+.shape-flower {
+  -webkit-clip-path: url(#shape-flower);
+  clip-path: url(#shape-flower);
+}
+
+.shape-quatrefoil {
+  -webkit-clip-path: url(#shape-quatrefoil);
+  clip-path: url(#shape-quatrefoil);
+}
+
+.shape-stamp {
+  -webkit-clip-path: url(#shape-stamp);
+  clip-path: url(#shape-stamp);
+}
+
+.shape-blob {
+  -webkit-clip-path: url(#shape-blob);
+  clip-path: url(#shape-blob);
+}
+
+.shape-sun-spin {
+  -webkit-clip-path: url(#shape-sun-spin);
+  clip-path: url(#shape-sun-spin);
+}
+
+.shape-flower-spin {
+  -webkit-clip-path: url(#shape-flower-spin);
+  clip-path: url(#shape-flower-spin);
+}
+
+.shape-blob-morph {
+  -webkit-clip-path: url(#shape-blob-morph);
+  clip-path: url(#shape-blob-morph);
+}
+
 /* ---------- Tile band ---------- */
 
 .tileband {
@@ -1685,7 +1801,7 @@ button:hover .roll-line span {
   }
 
   .hero-visual {
-    height: 62svh;
+    height: min(62svh, 100vw);
     max-width: 480px;
     width: 100%;
     margin: 0 auto;
@@ -1795,6 +1911,7 @@ button:hover .roll-line span {
 @media (prefers-reduced-motion: reduce) {
   .grain,
   .win-rays span,
+  .hero-ring,
   .badge svg,
   .blink,
   .visit-status.is-open i {
@@ -1803,6 +1920,10 @@ button:hover .roll-line span {
 
   .roll-line span,
   .dish-zoom,
+  .dish-photo,
+  .dish-shadow,
+  .moment-art,
+  .moment-shadow,
   .btn {
     transition: none;
   }
