@@ -22,6 +22,11 @@ export function Header() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // Lets sticky bars further down slide up into the header's place.
+  useEffect(() => {
+    document.documentElement.classList.toggle('header-hidden', hidden)
+  }, [hidden])
+
   const go = (id) => (e) => {
     e.preventDefault()
     scrollTo(id)

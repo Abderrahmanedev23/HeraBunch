@@ -34,6 +34,7 @@ const strings = {
       label: 'The menu',
       title: 'Made fresh, to order, meant to be shared.',
       all: 'All',
+      swipe: 'Swipe the dishes to change category',
       cats: { moroccan: 'Moroccan', eggs: 'Eggs', sweet: 'Sweet', drinks: 'Juice & coffee' },
       items: {
         msemen: ['Msemen', 'Flaky square pancakes, served warm with honey and amlou.'],
@@ -108,6 +109,7 @@ const strings = {
       label: 'La carte',
       title: 'Préparé frais, à la commande, pour être partagé.',
       all: 'Tout',
+      swipe: 'Glissez les plats pour changer de catégorie',
       cats: { moroccan: 'Marocain', eggs: 'Œufs', sweet: 'Sucré', drinks: 'Jus & café' },
       items: {
         msemen: ['Msemen', 'Crêpes feuilletées carrées, servies chaudes avec miel et amlou.'],
@@ -182,6 +184,7 @@ const strings = {
       label: 'القائمة',
       title: 'طازج، عند الطلب، ومصنوع للمشاركة.',
       all: 'الكل',
+      swipe: 'اسحب الأطباق لتغيير الفئة',
       cats: { moroccan: 'مغربي', eggs: 'البيض', sweet: 'حلو', drinks: 'عصير وقهوة' },
       items: {
         msemen: ['مسمن', 'رقائق مربعة مورّقة، تُقدَّم ساخنة مع العسل وأملو.'],

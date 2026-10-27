@@ -23,9 +23,13 @@ export function startSmoothScroll() {
   gsap.ticker.lagSmoothing(0)
 }
 
-export function scrollTo(target) {
-  if (lenis) lenis.scrollTo(target, { offset: -20, duration: 1.4 })
-  else document.querySelector(target)?.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth' })
+export function scrollTo(target, offset = -20) {
+  if (lenis) {
+    lenis.scrollTo(target, { offset, duration: 1.4 })
+    return
+  }
+  const el = document.querySelector(target)
+  if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY + offset, behavior: reducedMotion ? 'auto' : 'smooth' })
 }
 
 // Runs GSAP setup scoped to a ref and reverts it on unmount or when deps change.

@@ -10,7 +10,7 @@ Website for **Hera Brunch**, Rabat’s home of breakfast.
 4. **Intro:** the homepage text fills in word by word as you scroll.
 5. **Two traditions, one table:** a pinned scene. Moroccan plates slide in from one side and brunch plates from the other, and they meet on one table.
 6. **Tile band:** a strip of zellige stars that slides sideways as you scroll.
-7. **Menu:** every dish sits in a frame that tells its story (see *Frame shapes* below), with a coloured offset behind it like a print. Each shape blooms open as it scrolls in, and filtering glides the cards to their new places.
+7. **Menu:** every dish sits in a frame that tells its story (see *Frame shapes* below), with a coloured offset behind it like a print. Each shape blooms open as it scrolls in. Category tabs sit in a sticky pill bar with a thumb that glides to the active tab; switching slides the dishes out and the new ones in from the side you're heading to, while the list smoothly resizes. On phones you can swipe the dishes to change category; on a keyboard, the arrow keys move between tabs.
 8. **Every morning:** a striped café awning unrolls over the section, and three clips bloom open in their own shapes: honey over pancakes in a honey drop, fresh juice in a turning orange slice, and tea poured from height in a slowly changing fried-egg shape.
 9. **Marquee:** a looping text band that reacts to scroll speed.
 10. **Visit:** live Rabat time, open/closed status, hours, directions and a spinning "Book a table" badge.
